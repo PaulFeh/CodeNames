@@ -1,48 +1,56 @@
 <mat-toolbar
   class="scoreboard"
   [ngClass]="{
-    'red-background': teamTurn === 1,
-    'blue-background': teamTurn === 2
+    'red-background': game?.teamTurn === 1,
+    'blue-background': game?.teamTurn === 2
   }"
 >
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
     <div class="score">
-      <span class="team1 red-background">{{ cardsLeftTeam1.length }}</span> -
-      <span class="team2 blue-background">{{ cardsLeftTeam2.length }}</span>
+      <span class="team1 red-background">{{ cardsLeftTeam1?.length }}</span> -
+      <span class="team2 blue-background">{{ cardsLeftTeam2?.length }}</span>
       <span
         class="turn"
         [ngClass]="{
-          'red-background': teamTurn === 1,
-          'blue-background': teamTurn === 2
+          'red-background': game?.teamTurn === 1,
+          'blue-background': game?.teamTurn === 2
         }"
-        >{{ teamTurn === 1 ? "Red's" : "Blue's" }} Turn
+        >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
       </span>
     </div>
     <div class="actions">
-      <button mat-raised-button *ngIf="teamWon === 0" (click)="clickedShowTeams()">
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon === 0"
+        (click)="clickedShowTeams()"
+      >
         I am Code Master
       </button>
-      <button mat-raised-button *ngIf="teamWon !== 0" (click)="newGame()">
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon !== 0"
+        (click)="newGame(gameId)"
+      >
         New Game
       </button>
-      <button mat-raised-button *ngIf="teamWon === 0" (click)="endTurn()">
+      <button mat-raised-button *ngIf="game?.teamWon === 0" (click)="endTurn()">
         End Turn
       </button>
     </div>
   </mat-toolbar-row>
-  <mat-toolbar-row *ngIf="teamWon !== 0">
+  <mat-toolbar-row *ngIf="game?.teamWon !== 0">
     <div class="winner">
-      {{ teamWon === 1 ? "Red Team Wins!!" : "" }}
-      {{ teamWon === 2 ? "Blue Team Wins!!" : "" }}
+      {{ game?.teamWon === 1 ? "Red Team Wins!!" : "" }}
+      {{ game?.teamWon === 2 ? "Blue Team Wins!!" : "" }}
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <div fxLayout="row wrap" fxLayoutGap="15px" class="">
   <mat-card
-    *ngFor="let card of cards"
+    *ngFor="let card of game?.cards"
     [ngClass]="{
-      outline: showTeams || teamWon !== 0,
+      outline: showTeams || game?.teamWon !== 0,
       show: card.selected,
       team1: card.team === 1,
       team2: card.team === 2,

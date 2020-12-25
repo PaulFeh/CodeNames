@@ -2,10 +2,11 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  // Output,
-  // EventEmitter,
+  Output,
+  EventEmitter,
+  Input,
 } from '@angular/core';
-import { PictureService } from '../picture.service';
+import { Game, GameService } from '../game.service';
 
 export interface Card {
   id: number;
@@ -22,101 +23,56 @@ export interface Card {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameBoardComponent implements OnInit {
-  cards: Card[] = [];
   totalCards = 20;
   showTeams = false;
-  teamTurn = 1;
-  teamWon = 0;
 
   get cardsTeam1() {
-    return this.cards.filter((card) => card.team === 1);
+    return this.game?.cards.filter((card) => card.team === 1);
   }
   get cardsLeftTeam1() {
-    return this.cardsTeam1.filter((card) => card.selected === false);
+    return this.cardsTeam1?.filter((card) => card.selected === false);
   }
 
   get cardsTeam2() {
-    return this.cards.filter((card) => card.team === 2);
+    return this.game?.cards.filter((card) => card.team === 2);
   }
 
   get cardsLeftTeam2() {
-    return this.cardsTeam2.filter((card) => card.selected === false);
+    return this.cardsTeam2?.filter((card) => card.selected === false);
   }
 
-  // @Output()
-  // cardSelected: EventEmitter<Card> = new EventEmitter();
-  constructor(private pictureService: PictureService) {
-    this.generateBoard(this.totalCards);
-  }
+  @Input()
+  gameId: string = '';
+  @Input()
+  game: Game | undefined | null;
+  @Output()
+  cardSelected: EventEmitter<Card> = new EventEmitter();
+  @Output()
+  turnEnded: EventEmitter<number> = new EventEmitter();
+
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {}
-
-  generateBoard(totalCards: number = 20) {
-    this.cards = [];
-    this.showTeams = false;
-    this.teamTurn = 1;
-    this.teamWon = 0;
-    let startId = 0;
-    const numTeamCards = 7;
-    const images = this.pictureService.getImages(totalCards);
-
-    // add assassin card
-    this.cards.push({
-      pictureUrl: images[startId],
-      id: startId++,
-      team: 0,
-      assassin: true,
-      selected: false,
-    });
-
-    // add team 1 cards
-    for (let index = 0; index < numTeamCards + 1; index++) {
-      this.cards.push({
-        pictureUrl: images[startId],
-        id: startId++,
-        team: 1,
-        assassin: false,
-        selected: false,
-      });
-    }
-
-    // add team 2 cards
-    for (let index = 0; index < numTeamCards; index++) {
-      this.cards.push({
-        pictureUrl: images[startId],
-        id: startId++,
-        team: 2,
-        assassin: false,
-        selected: false,
-      });
-    }
-
-    // add neutral cards
-    while (this.cards.length < totalCards) {
-      this.cards.push({
-        pictureUrl: images[startId],
-        id: startId++,
-        team: 0,
-        assassin: false,
-        selected: false,
-      });
-    }
-
-    this.shuffle(this.cards);
-  }
 
   clickedCard(card: Card) {
     if (this.showTeams || card.selected) {
       return;
     }
 
-    if (this.teamWon === 0) {
-      // this.cardSelected.emit(card);
+    if (this.game?.teamWon === 0) {
+      this.cardSelected.emit(card);
       card.selected = true;
-      this.teamWon = this.gameWon(this.cards, card);
-      if (this.teamTurn !== card.team) {
-        this.endTurn();
+      this.game.teamWon = this.gameWon(card);
+      if (this.game?.teamTurn !== card.team) {
+        this.endTurn(false);
       }
+
+      this.gameService.updateGame(
+        {
+          ...this.game,
+        },
+        this.gameId
+      );
     }
   }
 
@@ -124,45 +80,35 @@ export class GameBoardComponent implements OnInit {
     this.showTeams = !this.showTeams;
   }
 
-  endTurn() {
-    this.teamTurn = this.teamTurn === 1 ? 2 : 1;
+  endTurn(update = true) {
+    if (this.game) {
+      this.turnEnded.emit(this.game?.teamTurn);
+      this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
+
+      this.gameService.updateGame(
+        {
+          ...this.game,
+        },
+        this.gameId
+      );
+    }
   }
 
-  newGame() {
-    this.generateBoard(this.totalCards);
+  newGame(id?: string) {
+    this.gameService.newGame(id);
   }
 
-  gameWon(cards: Card[], selectedCard: Card) {
+  gameWon(selectedCard: Card) {
     let winningTeam = 0;
 
     if (selectedCard.assassin === true) {
-      winningTeam = this.teamTurn === 1 ? 2 : 1;
-    } else if (this.cardsTeam1.every((card) => card.selected === true)) {
+      winningTeam = this.game?.teamTurn === 1 ? 2 : 1;
+    } else if (this.cardsTeam1?.every((card) => card.selected === true)) {
       winningTeam = 1;
-    } else if (this.cardsTeam2.every((card) => card.selected === true)) {
+    } else if (this.cardsTeam2?.every((card) => card.selected === true)) {
       winningTeam = 2;
     }
 
     return winningTeam;
-  }
-
-  private shuffle(array: Card[]) {
-    var currentIndex = array.length,
-      temporaryValue,
-      randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
   }
 }

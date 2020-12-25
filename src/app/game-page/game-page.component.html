@@ -1,0 +1,6 @@
+<ng-container *ngIf="currentGame$ | async as game">
+  <app-game-board
+    [game]="game"
+    [gameId]="(gameId$ | async) || ''"
+  ></app-game-board>
+</ng-container>
