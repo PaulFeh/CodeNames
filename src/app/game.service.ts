@@ -27,7 +27,6 @@ export class GameService {
 
   newGame(id?: string) {
     const game = this.generateGame();
-    console.log({ game });
     if (id) {
       this.currentGame?.set(game);
       return of(id);
