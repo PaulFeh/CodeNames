@@ -1,9 +1,58 @@
-<button mat-stroked-button (click)="clickedShowTeams()">I am Code Master</button>
+<mat-toolbar
+  class="scoreboard"
+  [ngClass]="{
+    'red-background': teamTurn === 1,
+    'blue-background': teamTurn === 2
+  }"
+>
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="score">
+      <span class="team1 red-background">{{ cardsLeftTeam1.length }}</span> -
+      <span class="team2 blue-background">{{ cardsLeftTeam2.length }}</span>
+      <span
+        class="turn"
+        [ngClass]="{
+          'red-background': teamTurn === 1,
+          'blue-background': teamTurn === 2
+        }"
+        >{{ teamTurn === 1 ? "Red" : "Blue" }} Turn
+      </span>
+    </div>
+    <div class="actions">
+      <button mat-raised-button (click)="clickedShowTeams()">
+        I am Code Master
+      </button>
+      <button mat-raised-button *ngIf="teamWon !== 0" (click)="newGame()">
+        New Game
+      </button>
+      <button mat-raised-button *ngIf="teamWon === 0" (click)="endTurn()">
+        End Turn
+      </button>
+    </div>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="teamWon !== 0">
+    <div class="winner">
+      {{ teamWon === 1 ? "Red Team Wins!!" : "" }}
+      {{ teamWon === 2 ? "Blue Team Wins!!" : "" }}
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-<div fxLayout="row wrap" fxLayoutGap="15px">
-  <mat-card *ngFor="let card of cards" [ngClass]="{'outline' :showTeams, 'show': card.selected, 'team1': card.team===0, 'team2': card.team===1, 'neutral':  card.team ===2, 'assassin': card.assassin }" (click)="clickedCard(card)">
+<div fxLayout="row wrap" fxLayoutGap="15px" class="">
+  <mat-card
+    *ngFor="let card of cards"
+    [ngClass]="{
+      outline: showTeams || teamWon !== 0,
+      show: card.selected,
+      team1: card.team === 1,
+      team2: card.team === 2,
+      neutral: card.team === 0,
+      assassin: card.assassin
+    }"
+    (click)="clickedCard(card)"
+  >
     <mat-card-content>
-      <img [src]="card.pictureUrl" alt="">
+      <img [src]="card.pictureUrl" alt="" />
     </mat-card-content>
   </mat-card>
 </div>

@@ -1,36 +1,71 @@
-$colorTeam1: red;
-$colorTeam2: blue;
-$colorNeutral: burlyWood;
-$colorAssassin: black;
+$team1Color1: red;
+$team1Color2: rgba(255, 0, 0, 0.25);
 
-.show.team1 {
-  background-color: $colorTeam1;
+$team2Color1: blue;
+$team2Color2: rgba(0, 0, 255, 0.25);
+$neutralColor1: tan;
+$neutralColor2: rgba(210, 180, 140, 0.5);
+
+$assassinColor1: black;
+$assassinColor2: rgba(0, 0, 0, 0.5);
+
+$borderWidth: 5px;
+
+img {
+  width: 15vw;
 }
 
-.show.team2 {
-  background-color: $colorTeam2;
+.scoreboard {
+  font-size: 2em;
 }
 
-.show.neutral {
-  background-color: $colorNeutral;
+.turn {
+  margin-left: 2em;
 }
 
-.show.assassin {
-  background-color: $colorAssassin;
+.winner {
+  font-size: 3em;
+}
+
+.red-background {
+  background-color: $team1Color2;
+}
+.blue-background {
+  background-color: $team2Color2;
 }
 
 .outline.team1 {
-  border: 3px dashed $colorTeam1;
+  border: $borderWidth dashed $team1Color1;
+  background-color: $team1Color2;
 }
 
 .outline.team2 {
-  border: 3px dashed $colorTeam2;
+  border: $borderWidth dashed $team2Color1;
+  background-color: $team2Color2;
 }
 
 .outline.neutral {
-  border: 3px dashed $colorNeutral;
+  border: $borderWidth dashed $neutralColor1;
+  background-color: $neutralColor2;
 }
 
 .outline.assassin {
-  border: 3px dashed $colorAssassin;
+  border: $borderWidth dashed $assassinColor1;
+  background-color: $assassinColor2;
+}
+
+.show.team1 {
+  background-color: $team1Color1;
+}
+
+.show.team2 {
+  background-color: $team2Color1;
+}
+
+.show.neutral {
+  background-color: $neutralColor2;
+}
+
+.show.assassin {
+  background-color: $assassinColor1;
 }

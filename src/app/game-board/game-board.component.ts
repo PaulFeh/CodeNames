@@ -2,9 +2,10 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  Output,
-  EventEmitter,
+  // Output,
+  // EventEmitter,
 } from '@angular/core';
+import { PictureService } from '../picture.service';
 
 export interface Card {
   id: number;
@@ -24,78 +25,134 @@ export class GameBoardComponent implements OnInit {
   cards: Card[] = [];
   totalCards = 20;
   showTeams = false;
+  teamTurn = 1;
+  teamWon = 0;
 
-  @Output()
-  cardSelected: EventEmitter<Card> = new EventEmitter();
-  constructor() {}
+  get cardsTeam1() {
+    return this.cards.filter((card) => card.team === 1);
+  }
+  get cardsLeftTeam1() {
+    return this.cardsTeam1.filter((card) => card.selected === false);
+  }
 
-  ngOnInit(): void {
+  get cardsTeam2() {
+    return this.cards.filter((card) => card.team === 2);
+  }
+
+  get cardsLeftTeam2() {
+    return this.cardsTeam2.filter((card) => card.selected === false);
+  }
+
+  // @Output()
+  // cardSelected: EventEmitter<Card> = new EventEmitter();
+  constructor(private pictureService: PictureService) {
     this.generateBoard(this.totalCards);
   }
 
-  generateBoard(totalCards: number = 20) {
-    let startId = 0;
-    const numTeamCards= 7
+  ngOnInit(): void {}
 
+  generateBoard(totalCards: number = 20) {
+    this.cards = [];
+    this.showTeams = false;
+    this.teamTurn = 1;
+    this.teamWon = 0;
+    let startId = 0;
+    const numTeamCards = 7;
+    const images = this.pictureService.getImages(totalCards);
+
+    // add assassin card
     this.cards.push({
+      pictureUrl: images[startId],
       id: startId++,
-      pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-      team: -1,
+      team: 0,
       assassin: true,
       selected: false,
     });
 
-    for (let index = 0; index < numTeamCards; index++) {
+    // add team 1 cards
+    for (let index = 0; index < numTeamCards + 1; index++) {
       this.cards.push({
+        pictureUrl: images[startId],
         id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-        team: 0,
-        assassin: false,
-        selected: false,
-      });
-    }
-    for (let index = 0; index < numTeamCards+1; index++) {
-      this.cards.push({
-        id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
         team: 1,
         assassin: false,
         selected: false,
       });
     }
-    for (let index = 0; index < totalCards-2-(numTeamCards* 2 ); index++) {
+
+    // add team 2 cards
+    for (let index = 0; index < numTeamCards; index++) {
       this.cards.push({
+        pictureUrl: images[startId],
         id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
         team: 2,
         assassin: false,
         selected: false,
       });
     }
 
+    // add neutral cards
+    while (this.cards.length < totalCards) {
+      this.cards.push({
+        pictureUrl: images[startId],
+        id: startId++,
+        team: 0,
+        assassin: false,
+        selected: false,
+      });
+    }
+
     this.shuffle(this.cards);
-    console.log(this.cards.length)
   }
 
   clickedCard(card: Card) {
-    this.cardSelected.emit(card);
-    card.selected = true;
+    if (this.showTeams || card.selected) {
+      return;
+    }
+
+    if (this.teamWon === 0) {
+      // this.cardSelected.emit(card);
+      card.selected = true;
+      this.teamWon = this.gameWon(this.cards, card);
+      if (this.teamTurn !== card.team) {
+        this.endTurn();
+      }
+    }
   }
 
   clickedShowTeams() {
     this.showTeams = !this.showTeams;
   }
 
-  private getRandomInt(max: number) {
-    return Math.floor(Math.random() * Math.floor(max));
+  endTurn() {
+      this.teamTurn = this.teamTurn === 1 ? 2 : 1;
+  }
+
+  newGame() {
+    this.generateBoard(this.totalCards);
+  }
+
+  gameWon(cards: Card[], selectedCard: Card) {
+    let winningTeam = 0;
+
+    if (selectedCard.assassin === true) {
+      winningTeam = this.teamTurn === 1 ? 2 : 1;
+    } else if (this.cardsTeam1.every((card) => card.selected === true)) {
+      winningTeam = 1;
+    } else if (this.cardsTeam2.every((card) => card.selected === true)) {
+      winningTeam = 2;
+    }
+
+    return winningTeam;
   }
 
   private shuffle(array: Card[]) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-
       // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
