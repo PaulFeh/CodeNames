@@ -1,0 +1,36 @@
+$colorTeam1: red;
+$colorTeam2: blue;
+$colorNeutral: burlyWood;
+$colorAssassin: black;
+
+.show.team1 {
+  background-color: $colorTeam1;
+}
+
+.show.team2 {
+  background-color: $colorTeam2;
+}
+
+.show.neutral {
+  background-color: $colorNeutral;
+}
+
+.show.assassin {
+  background-color: $colorAssassin;
+}
+
+.outline.team1 {
+  border: 3px dashed $colorTeam1;
+}
+
+.outline.team2 {
+  border: 3px dashed $colorTeam2;
+}
+
+.outline.neutral {
+  border: 3px dashed $colorNeutral;
+}
+
+.outline.assassin {
+  border: 3px dashed $colorAssassin;
+}

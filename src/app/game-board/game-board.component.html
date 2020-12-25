@@ -1,0 +1,9 @@
+<button mat-stroked-button (click)="clickedShowTeams()">I am Code Master</button>
+
+<div fxLayout="row wrap" fxLayoutGap="15px">
+  <mat-card *ngFor="let card of cards" [ngClass]="{'outline' :showTeams, 'show': card.selected, 'team1': card.team===0, 'team2': card.team===1, 'neutral':  card.team ===2, 'assassin': card.assassin }" (click)="clickedCard(card)">
+    <mat-card-content>
+      <img [src]="card.pictureUrl" alt="">
+    </mat-card-content>
+  </mat-card>
+</div>
