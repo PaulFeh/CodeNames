@@ -15,11 +15,11 @@
           'red-background': teamTurn === 1,
           'blue-background': teamTurn === 2
         }"
-        >{{ teamTurn === 1 ? "Red" : "Blue" }} Turn
+        >{{ teamTurn === 1 ? "Red's" : "Blue's" }} Turn
       </span>
     </div>
     <div class="actions">
-      <button mat-raised-button (click)="clickedShowTeams()">
+      <button mat-raised-button *ngIf="teamWon === 0" (click)="clickedShowTeams()">
         I am Code Master
       </button>
       <button mat-raised-button *ngIf="teamWon !== 0" (click)="newGame()">

@@ -125,7 +125,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   endTurn() {
-      this.teamTurn = this.teamTurn === 1 ? 2 : 1;
+    this.teamTurn = this.teamTurn === 1 ? 2 : 1;
   }
 
   newGame() {
