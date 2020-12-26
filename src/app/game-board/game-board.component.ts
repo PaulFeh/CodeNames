@@ -111,4 +111,8 @@ export class GameBoardComponent implements OnInit {
 
     return winningTeam;
   }
+
+  trackByFn(index: number, item: Card) {
+    return item.id;
+  }
 }

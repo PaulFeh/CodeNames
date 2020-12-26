@@ -48,7 +48,7 @@
 
 <div fxLayout="row wrap" fxLayoutGap="15px" class="">
   <mat-card
-    *ngFor="let card of game?.cards"
+    *ngFor="let card of game?.cards; trackBy: trackByFn"
     [ngClass]="{
       outline: showTeams || game?.teamWon !== 0,
       show: card.selected,
