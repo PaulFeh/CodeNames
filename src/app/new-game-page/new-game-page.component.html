@@ -1,5 +1,45 @@
-<div fxFlex fxLayout="column" fxLayoutAlign="center center">
-  <button mat-raised-button color="primary" (click)="newGame()">
-    New Game
-  </button>
+<div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <mat-toolbar color="primary">
+    <span>Ciper Title Paintings</span>
+  </mat-toolbar>
+  <mat-card class="action-card">
+    <mat-card-header>
+      <mat-card-title>New Game</mat-card-title>
+      <!-- <mat-card-subtitle>subtitle</mat-card-subtitle> -->
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="newGame()" fxFlex>
+        Start
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="action-card">
+    <mat-card-header>
+      <mat-card-title>Join Game</mat-card-title>
+      <!-- <mat-card-subtitle>subtitle</mat-card-subtitle> -->
+    </mat-card-header>
+    <mat-card-content fxLayout="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <input
+          matInput
+          placeholder="Room Code"
+          [formControl]="gameCodeControl"
+          [value]="gameCode"
+        />
+      </mat-form-field>
+      <div *ngIf="gameNotFound && !gameCodeControl.value">Game Not Found</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        (click)="joinGame(gameCodeControl.value)"
+        color="primary"
+        [disabled]="!gameCodeControl.value"
+        fxFlex
+      >
+        Join
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

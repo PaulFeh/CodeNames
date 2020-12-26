@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { GameService } from '../game.service';
 
 @Component({
@@ -25,12 +25,18 @@ export class GamePageComponent implements OnInit {
       typeof id === 'string'
         ? this.gameService.getCurrentGame(id).valueChanges()
         : of(null)
-    )
+    ),
+    tap((game) => {
+      if (!game) {
+        this.router.navigate([''], { state: { notFound: true } });
+      }
+    })
   );
 
   constructor(
     private gameService: GameService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}

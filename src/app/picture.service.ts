@@ -18,7 +18,7 @@ export class PictureService {
         images.add(rand);
       }
     }
-    
+
     return [...images].map(
       (image) =>
         `https://github.com/jminuscula/dixit-online/blob/master/cards/card_${image

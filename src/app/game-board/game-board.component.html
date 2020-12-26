@@ -18,7 +18,19 @@
         >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
       </span>
     </div>
-    <div class="actions">
+    <div fxHide fxShow.gt-sm>
+      <div *ngTemplateOutlet="actions"></div>
+    </div>
+    <a mat-raised-button [routerLink]="['']">Leave Game</a>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row fxHide.gt-sm>
+    <span class="game-code">Game Code: {{ gameId }}</span>
+  </mat-toolbar-row>
+
+  <ng-template #actions>
+    <div class="actions" fxLayout="row" fxLayoutGap="10px">
+      <span class="game-code" fxHide fxShow.gt-sm>Game Code: {{ gameId }}</span>
       <button
         mat-raised-button
         *ngIf="game?.teamWon === 0"
@@ -37,6 +49,10 @@
         End Turn
       </button>
     </div>
+  </ng-template>
+
+  <mat-toolbar-row fxHide.gt-sm>
+    <ng-container *ngTemplateOutlet="actions"></ng-container>
   </mat-toolbar-row>
   <mat-toolbar-row *ngIf="game?.teamWon !== 0">
     <div class="winner">
@@ -46,7 +62,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div fxLayout="row wrap" fxLayoutGap="15px" class="">
+<div class="grid">
   <mat-card
     *ngFor="let card of game?.cards; trackBy: trackByFn"
     [ngClass]="{

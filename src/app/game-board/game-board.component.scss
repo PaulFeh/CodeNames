@@ -12,15 +12,22 @@ $assassinColor2: rgba(0, 0, 0, 0.5);
 $borderWidth: 5px;
 
 img {
-  width: 15vw;
+  // width: 15vw;
+  width: 100%;
 }
 
 .scoreboard {
-  font-size: 2em;
+  .score {
+    // font-size: 1.5em;
+  }
+}
+
+.game-code {
+  font-size: 0.75em;
 }
 
 .turn {
-  margin-left: 2em;
+  margin-left: 1em;
 }
 
 .winner {
@@ -68,4 +75,10 @@ img {
 
 .show.assassin {
   background-color: $assassinColor1;
+}
+
+.grid {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
