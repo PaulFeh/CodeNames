@@ -1,8 +1,8 @@
 <mat-toolbar
-  class="scoreboard"
+  class="scoreboard sticky"
   [ngClass]="{
-    'red-background': game?.teamTurn === 1,
-    'blue-background': game?.teamTurn === 2
+    red: game?.teamTurn === 1,
+    blue: game?.teamTurn === 2
   }"
 >
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">

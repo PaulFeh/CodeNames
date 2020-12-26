@@ -1,8 +1,10 @@
 $team1Color1: red;
 $team1Color2: rgba(255, 0, 0, 0.25);
+$team1Color3: rgb(245, 83, 83);
 
 $team2Color1: blue;
 $team2Color2: rgba(0, 0, 255, 0.25);
+$team2Color3: rgb(123, 123, 255);
 $neutralColor1: tan;
 $neutralColor2: rgba(210, 180, 140, 0.5);
 
@@ -12,13 +14,11 @@ $assassinColor2: rgba(0, 0, 0, 0.5);
 $borderWidth: 5px;
 
 img {
-  // width: 15vw;
   width: 100%;
 }
 
 .scoreboard {
   .score {
-    // font-size: 1.5em;
   }
 }
 
@@ -83,5 +83,19 @@ img {
 .grid {
   display: grid;
   gap: 15px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+}
+
+mat-toolbar.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+mat-toolbar.red {
+  background-color: $team1Color3;
+}
+
+mat-toolbar.blue {
+  background-color: $team2Color3;
 }
