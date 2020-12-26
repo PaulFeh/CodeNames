@@ -16,7 +16,6 @@ import { environment } from '../environments/environment';
 import { NewGamePageComponent } from './new-game-page/new-game-page.component';
 import { GamePageComponent } from './game-page/game-page.component';
 import { AngularFireModule } from '@angular/fire';
-import { ReactiveFormsModule } from '@angular/forms';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAARLVWBge9-Kiu6mLNg4re0FtgxM494lE',
@@ -39,7 +38,6 @@ const firebaseConfig = {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,

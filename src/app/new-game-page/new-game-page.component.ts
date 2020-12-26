@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from '../game.service';
 
@@ -11,9 +10,6 @@ export class NewGamePageComponent implements OnInit {
   gameNotFound = this.router.getCurrentNavigation()?.extras.state?.notFound;
 
   constructor(private router: Router, private gameService: GameService) {}
-
-  gameCodeControl = new FormControl('');
-  gameCode: string = '';
 
   ngOnInit(): void {}
 
