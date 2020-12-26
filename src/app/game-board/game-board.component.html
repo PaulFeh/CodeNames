@@ -25,12 +25,23 @@
   </mat-toolbar-row>
 
   <mat-toolbar-row fxHide.gt-sm>
-    <span class="game-code">Game Code: {{ gameId }}</span>
+    <ng-container *ngTemplateOutlet="gameCode"></ng-container>
   </mat-toolbar-row>
+
+  <ng-template #gameCode>
+    <div class="game-code">
+      <button mat-raised-button (click)="showCode = !showCode">
+        {{ showCode ? "Hide" : "Show" }} Code
+      </button>
+      <span [hidden]="!showCode">{{ gameId }}</span>
+    </div>
+  </ng-template>
 
   <ng-template #actions>
     <div class="actions" fxLayout="row" fxLayoutGap="10px">
-      <span class="game-code" fxHide fxShow.gt-sm>Game Code: {{ gameId }}</span>
+      <span class="" fxHide fxShow.gt-sm>
+        <ng-container *ngTemplateOutlet="gameCode"></ng-container>
+      </span>
       <button
         mat-raised-button
         *ngIf="game?.teamWon === 0"

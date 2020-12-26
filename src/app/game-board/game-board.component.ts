@@ -25,6 +25,7 @@ export interface Card {
 export class GameBoardComponent implements OnInit {
   totalCards = 20;
   showTeams = false;
+  showCode = false;
 
   get cardsTeam1() {
     return this.game?.cards.filter((card) => card.team === 1);
