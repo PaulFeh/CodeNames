@@ -6,15 +6,17 @@
   }"
 >
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-    <div class="score">
-      <span class="team1 red-background">{{ cardsLeftTeam1?.length }}</span> -
-      <span class="team2 blue-background">{{ cardsLeftTeam2?.length }}</span>
-      <span
-        class="turn"
-        [ngClass]="{
-          'red-background': game?.teamTurn === 1,
-          'blue-background': game?.teamTurn === 2
-        }"
+    <div class="score" fxLayout="row">
+      <mat-chip-list>
+        <mat-chip color="accent" selected>{{
+          cardsLeftTeam1?.length
+        }}</mat-chip>
+        -
+        <mat-chip color="primary" selected>{{
+          cardsLeftTeam2?.length
+        }}</mat-chip>
+      </mat-chip-list>
+      <span class="turn"
         >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
       </span>
     </div>

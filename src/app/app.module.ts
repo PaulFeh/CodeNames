@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -42,6 +43,7 @@ const firebaseConfig = {
     MatButtonModule,
     MatToolbarModule,
     MatInputModule,
+    MatChipsModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,
