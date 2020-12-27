@@ -33,7 +33,7 @@
   <ng-template #gameCode>
     <div class="game-code">
       <button mat-raised-button (click)="showCode = !showCode">
-        {{ showCode ? "Hide" : "Show" }} Code
+        {{ showCode ? "Hide" : "Show" }} Room Code
       </button>
       <span [hidden]="!showCode">{{ game?.code }}</span>
     </div>
