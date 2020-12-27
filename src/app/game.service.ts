@@ -27,7 +27,7 @@ export class GameService {
     private pictureService: PictureService
   ) {}
 
-  newGame(id?: string) {
+  newGame(id?: string): Observable<string> {
     const length = 6;
     const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const code = randomString(length, values);

@@ -20,7 +20,16 @@
     <mat-card-content fxLayout="column">
       <mat-form-field appearance="outline" fxFlex>
         <mat-label>Room Code</mat-label>
-        <input matInput #roomCode placeholder="ABCDEF" [value]="" />
+        <input
+          matInput
+          #roomCode
+          placeholder="ABCDEF"
+          [value]=""
+          (input)="
+            roomCode.value = roomCode.value.substring(0, 6).toUpperCase()
+          "
+        />
+        <mat-hint>6 Letters</mat-hint>
       </mat-form-field>
       <div
         class="error"
