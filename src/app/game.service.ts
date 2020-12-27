@@ -3,7 +3,7 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
-import { from, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Card } from './game-board/game-board.component';
 import { PictureService } from './picture.service';
@@ -46,11 +46,16 @@ export class GameService {
     }
   }
 
-  getGameId(code: string) {
+  getGameId(code: string): Observable<string> {
     return this.afs
-      .doc('gameIds/abc')
+      .doc<{ [key: string]: string }>('gameIds/abc')
       .get()
-      .pipe(map((doc) => doc.get(code)));
+      .pipe(
+        map((doc) => {
+          const key = doc.get(code);
+          return key ? key : '';
+        })
+      );
   }
 
   getCurrentGame(id: string) {

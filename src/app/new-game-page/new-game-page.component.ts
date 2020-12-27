@@ -20,8 +20,14 @@ export class NewGamePageComponent implements OnInit {
   }
 
   joinGame(code: string) {
+    this.gameNotFound = false;
+
     this.gameService.getGameId(code.toLocaleUpperCase()).subscribe((id) => {
-      this.router.navigate(['/', id]);
+      if (id) {
+        this.router.navigate(['/', id]);
+      } else {
+        this.gameNotFound = true;
+      }
     });
   }
 }

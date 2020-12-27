@@ -21,7 +21,7 @@
       <mat-form-field appearance="outline" fxFlex>
         <input matInput #roomCode placeholder="Room Code" [value]="" />
       </mat-form-field>
-      <div *ngIf="gameNotFound && !roomCode.value">Game Not Found</div>
+      <div *ngIf="gameNotFound">Game Not Found</div>
     </mat-card-content>
     <mat-card-actions>
       <button
