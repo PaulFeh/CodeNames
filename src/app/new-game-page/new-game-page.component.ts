@@ -47,7 +47,7 @@ export class NewGamePageComponent implements OnInit {
   }
 
   joinGame(code: string) {
-    if (code) {
+    if (code && code.length === 6) {
       this.joinGame$.next(code);
     }
   }
