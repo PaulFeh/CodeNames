@@ -8,7 +8,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { Game, GameService } from '../game.service';
+import { Game } from '../game.service';
 
 export interface Card {
   id: number;
@@ -45,15 +45,13 @@ export class GameBoardComponent implements OnInit, OnChanges {
   }
 
   @Input()
-  gameId: string = '';
-  @Input()
   game: Game | undefined | null;
   @Output()
-  cardSelected: EventEmitter<Card> = new EventEmitter();
+  updateGameEvent = new EventEmitter<Game>();
   @Output()
-  turnEnded: EventEmitter<number> = new EventEmitter();
+  newGameEvent = new EventEmitter<null>();
 
-  constructor(private gameService: GameService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
@@ -71,19 +69,15 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
 
     if (this.game?.teamWon === 0) {
-      this.cardSelected.emit(card);
       card.selected = true;
       this.game.teamWon = this.gameWon(card);
       if (this.game?.teamTurn !== card.team) {
         this.endTurn(false);
       }
 
-      this.gameService.updateGame(
-        {
-          ...this.game,
-        },
-        this.gameId
-      );
+      this.updateGameEvent.emit({
+        ...this.game,
+      });
     }
   }
 
@@ -93,22 +87,18 @@ export class GameBoardComponent implements OnInit, OnChanges {
 
   endTurn(update = true) {
     if (this.game) {
-      this.turnEnded.emit(this.game?.teamTurn);
       this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
 
       if (update) {
-        this.gameService.updateGame(
-          {
-            ...this.game,
-          },
-          this.gameId
-        );
+        this.updateGameEvent.emit({
+          ...this.game,
+        });
       }
     }
   }
 
-  newGame(id?: string) {
-    this.gameService.newGame(id);
+  newGame() {
+    this.newGameEvent.next();
   }
 
   gameWon(selectedCard: Card) {

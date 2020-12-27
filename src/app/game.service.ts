@@ -64,7 +64,7 @@ export class GameService {
   }
 
   updateGame(updatedGame: Game, id: string) {
-    this.afs.doc<Game>(`games/${id}`).update(updatedGame);
+    return from(this.afs.doc<Game>(`games/${id}`).update(updatedGame));
   }
 
   private generateGame(key: string, totalCards: number = 20) {

@@ -51,11 +51,7 @@
       >
         I am Code Master
       </button>
-      <button
-        mat-raised-button
-        *ngIf="game?.teamWon !== 0"
-        (click)="newGame(gameId)"
-      >
+      <button mat-raised-button *ngIf="game?.teamWon !== 0" (click)="newGame()">
         New Game
       </button>
       <button mat-raised-button *ngIf="game?.teamWon === 0" (click)="endTurn()">

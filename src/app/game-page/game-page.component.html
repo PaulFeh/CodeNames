@@ -1,6 +1,7 @@
 <ng-container *ngIf="currentGame$ | async as game">
   <app-game-board
     [game]="game"
-    [gameId]="(gameId$ | async) || ''"
+    (updateGameEvent)="updateGame($event)"
+    (newGameEvent)="newGame()"
   ></app-game-board>
 </ng-container>

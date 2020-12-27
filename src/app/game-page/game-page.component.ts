@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { GameService } from '../game.service';
+import { map, switchMap, take, tap } from 'rxjs/operators';
+import { Game, GameService } from '../game.service';
 
 @Component({
   templateUrl: './game-page.component.html',
@@ -40,4 +40,22 @@ export class GamePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  updateGame(game: Game) {
+    this.gameId$
+      .pipe(
+        switchMap((id) => this.gameService.updateGame(game, id)),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  newGame() {
+    this.gameId$
+      .pipe(
+        switchMap((id) => this.gameService.newGame(id)),
+        take(1)
+      )
+      .subscribe();
+  }
 }
