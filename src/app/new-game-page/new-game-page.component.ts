@@ -19,7 +19,9 @@ export class NewGamePageComponent implements OnInit {
     });
   }
 
-  joinGame(id: string) {
-    this.router.navigate(['/', id]);
+  joinGame(code: string) {
+    this.gameService.getGameId(code.toLocaleUpperCase()).subscribe((id) => {
+      this.router.navigate(['/', id]);
+    });
   }
 }

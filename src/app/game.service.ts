@@ -4,11 +4,13 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { from, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Card } from './game-board/game-board.component';
 import { PictureService } from './picture.service';
+import { randomString } from './util';
 
 export interface Game {
+  code: string;
   cards: Card[];
   teamTurn: number;
   teamWon: number;
@@ -26,15 +28,29 @@ export class GameService {
   ) {}
 
   newGame(id?: string) {
-    const game = this.generateGame();
+    const length = 6;
+    const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const code = randomString(length, values);
+
+    const game = this.generateGame(code);
     if (id) {
       this.currentGame?.set(game);
       return of(id);
     } else {
       return from(this.afs.collection<Game>('games').add(game)).pipe(
-        map((game) => game.id)
+        map((game) => game.id),
+        tap((id) => {
+          this.afs.doc('gameIds/abc').update({ [code]: id });
+        })
       );
     }
+  }
+
+  getGameId(code: string) {
+    return this.afs
+      .doc('gameIds/abc')
+      .get()
+      .pipe(map((doc) => doc.get(code)));
   }
 
   getCurrentGame(id: string) {
@@ -46,8 +62,8 @@ export class GameService {
     this.afs.doc<Game>(`games/${id}`).update(updatedGame);
   }
 
-  private generateGame(totalCards: number = 20) {
-    let game: Game = { teamTurn: 1, teamWon: 0, cards: [] };
+  private generateGame(key: string, totalCards: number = 20) {
+    let game: Game = { code: key, teamTurn: 1, teamWon: 0, cards: [] };
 
     let cards = game.cards;
     let startId = 0;

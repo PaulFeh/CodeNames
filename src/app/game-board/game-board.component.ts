@@ -96,12 +96,14 @@ export class GameBoardComponent implements OnInit, OnChanges {
       this.turnEnded.emit(this.game?.teamTurn);
       this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
 
-      this.gameService.updateGame(
-        {
-          ...this.game,
-        },
-        this.gameId
-      );
+      if (update) {
+        this.gameService.updateGame(
+          {
+            ...this.game,
+          },
+          this.gameId
+        );
+      }
     }
   }
 
