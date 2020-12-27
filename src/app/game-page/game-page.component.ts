@@ -50,12 +50,7 @@ export class GamePageComponent implements OnInit {
       .subscribe();
   }
 
-  newGame() {
-    this.gameId$
-      .pipe(
-        switchMap((id) => this.gameService.newGame(id)),
-        take(1)
-      )
-      .subscribe();
+  newGame(gameCode: string) {
+    this.gameService.newGame(gameCode).pipe(take(1)).subscribe();
   }
 }

@@ -27,20 +27,19 @@ export class GameService {
     private pictureService: PictureService
   ) {}
 
-  newGame(id?: string): Observable<string> {
+  newGame(code?: string): Observable<string> {
     const length = 6;
     const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const code = randomString(length, values);
 
-    const game = this.generateGame(code);
-    if (id) {
+    const game = this.generateGame(code ? code : randomString(length, values));
+    if (code) {
       this.currentGame?.set(game);
-      return of(id);
+      return of(code);
     } else {
       return from(this.afs.collection<Game>('games').add(game)).pipe(
         map((game) => game.id),
         tap((id) => {
-          this.afs.doc('gameIds/abc').update({ [code]: id });
+          this.afs.doc('gameIds/abc').update({ [game.code]: id });
         })
       );
     }

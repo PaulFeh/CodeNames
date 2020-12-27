@@ -49,7 +49,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
   @Output()
   updateGameEvent = new EventEmitter<Game>();
   @Output()
-  newGameEvent = new EventEmitter<null>();
+  newGameEvent = new EventEmitter<string>();
 
   constructor() {}
 
@@ -98,7 +98,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
   }
 
   newGame() {
-    this.newGameEvent.next();
+    this.newGameEvent.next(this.game?.code);
   }
 
   gameWon(selectedCard: Card) {
