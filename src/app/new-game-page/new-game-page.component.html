@@ -3,7 +3,7 @@
     <span>Cipher Title Paintings</span>
   </mat-toolbar>
   <mat-card class="action-card">
-    <mat-card-header>
+    <mat-card-header fxLayout="row" fxLayoutAlign="center center">
       <mat-card-title>New Game</mat-card-title>
     </mat-card-header>
     <mat-card-actions>
@@ -14,14 +14,22 @@
   </mat-card>
 
   <mat-card class="action-card">
-    <mat-card-header>
+    <mat-card-header fxLayout="row" fxLayoutAlign="center center">
       <mat-card-title>Join Game</mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column">
       <mat-form-field appearance="outline" fxFlex>
-        <input matInput #roomCode placeholder="Room Code" [value]="" />
+        <mat-label>Room Code</mat-label>
+        <input matInput #roomCode placeholder="ABCDEF" [value]="" />
       </mat-form-field>
-      <div *ngIf="gameNotFound">Game Not Found</div>
+      <div
+        class="error"
+        *ngIf="gameNotFound"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+      >
+        <mat-icon>error</mat-icon> <span>Game Not Found</span>
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button

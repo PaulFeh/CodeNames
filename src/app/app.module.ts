@@ -9,6 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -17,6 +18,7 @@ import { environment } from '../environments/environment';
 import { NewGamePageComponent } from './new-game-page/new-game-page.component';
 import { GamePageComponent } from './game-page/game-page.component';
 import { AngularFireModule } from '@angular/fire';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAARLVWBge9-Kiu6mLNg4re0FtgxM494lE',
@@ -42,8 +44,10 @@ const firebaseConfig = {
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
+    MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
+    MatIconModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,
