@@ -5,6 +5,8 @@ import {
   Output,
   EventEmitter,
   Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { Game, GameService } from '../game.service';
 
@@ -22,7 +24,7 @@ export interface Card {
   styleUrls: ['./game-board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameBoardComponent implements OnInit {
+export class GameBoardComponent implements OnInit, OnChanges {
   totalCards = 20;
   showTeams = false;
   showCode = false;
@@ -54,6 +56,14 @@ export class GameBoardComponent implements OnInit {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    // if new game reset showTeams
+    let cards: Card[] = changes.game.currentValue.cards;
+    if (cards.every((card) => !card.selected)) {
+      this.showTeams = false;
+    }
+  }
 
   clickedCard(card: Card) {
     if (this.showTeams || card.selected) {
