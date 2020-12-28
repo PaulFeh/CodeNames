@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getRandomInt } from './util';
+import { shuffle } from './util';
 
 @Injectable({
   providedIn: 'root',
@@ -8,18 +8,18 @@ export class PictureService {
   constructor() {}
 
   getImages(total = 20): string[] {
-    const images = new Set<number>();
     const totalImages = 100;
+    let imgArray = Array.from(Array(totalImages), (e, i) => i + 1);
+    imgArray = shuffle(imgArray);
 
-    while (images.size < total) {
-      const rand = getRandomInt(1, totalImages);
-      const duplicates = [24, 45];
-      if (!duplicates.includes(rand)) {
-        images.add(rand);
-      }
-    }
+    imgArray = imgArray
+      .filter((val) => {
+        const duplicates = [24, 45];
+        return !duplicates.includes(val);
+      })
+      .slice(0, total);
 
-    return [...images].map(
+    return imgArray.map(
       (image) =>
         `https://github.com/jminuscula/dixit-online/blob/master/cards/card_${image
           .toString()

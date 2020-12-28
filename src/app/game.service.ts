@@ -7,7 +7,7 @@ import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Card } from './game-board/game-board.component';
 import { PictureService } from './picture.service';
-import { randomString } from './util';
+import { randomString, shuffle } from './util';
 
 export interface Game {
   code: string;
@@ -71,13 +71,12 @@ export class GameService {
   private generateGame(code: string, totalCards: number = 20): Game {
     const game: Game = { code, teamTurn: 1, teamWon: 0, cards: [] };
 
-    const cards = game.cards;
     let startId = 0;
     const numTeamCards = 7;
     const images = this.pictureService.getImages(totalCards);
 
     // add assassin card
-    cards.push({
+    game.cards.push({
       pictureUrl: images[startId],
       id: startId++,
       team: 0,
@@ -87,7 +86,7 @@ export class GameService {
 
     // add team 1 cards
     for (let index = 0; index < numTeamCards + 1; index++) {
-      cards.push({
+      game.cards.push({
         pictureUrl: images[startId],
         id: startId++,
         team: 1,
@@ -98,7 +97,7 @@ export class GameService {
 
     // add team 2 cards
     for (let index = 0; index < numTeamCards; index++) {
-      cards.push({
+      game.cards.push({
         pictureUrl: images[startId],
         id: startId++,
         team: 2,
@@ -108,8 +107,8 @@ export class GameService {
     }
 
     // add neutral cards
-    while (cards.length < totalCards) {
-      cards.push({
+    while (game.cards.length < totalCards) {
+      game.cards.push({
         pictureUrl: images[startId],
         id: startId++,
         team: 0,
@@ -118,28 +117,8 @@ export class GameService {
       });
     }
 
-    this.shuffle(cards);
+    game.cards = shuffle(game.cards);
 
     return game;
-  }
-
-  private shuffle<T>(array: T[]): T[] {
-    let currentIndex = array.length;
-    let temporaryValue: T;
-    let randomIndex: number;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
   }
 }
