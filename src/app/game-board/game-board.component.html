@@ -94,8 +94,8 @@
 
   <mat-toolbar-row *ngIf="game?.teamWon !== 0">
     <div class="winner">
-      {{ game?.teamWon === 1 ? "Red Team Wins!!" : "" }}
-      {{ game?.teamWon === 2 ? "Blue Team Wins!!" : "" }}
+      {{ game?.teamWon === 1 ? "Red Team Wins!" : "" }}
+      {{ game?.teamWon === 2 ? "Blue Team Wins!" : "" }}
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -131,7 +131,7 @@
     mat-fab
     matTooltip="End Turn"
     [color]="game?.teamTurn === 1 ? 'primary' : 'accent'"
-    class="md-fab-bottom-right2"
+    class="md-fab-bottom-right"
     fxHide.gt-sm
   >
     <mat-icon>task_alt</mat-icon>
@@ -143,7 +143,7 @@
     mat-fab
     matTooltip="New Game"
     [color]="game?.teamTurn === 1 ? 'primary' : 'accent'"
-    class="md-fab-bottom-right2"
+    class="md-fab-bottom-right"
     fxHide.gt-sm
   >
     <mat-icon>refresh</mat-icon>
