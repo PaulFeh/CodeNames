@@ -13,6 +13,10 @@ $assassinColor2: rgba(0, 0, 0, 0.8);
 
 $borderWidth: 5px;
 
+.card {
+  margin: 0.5em;
+}
+
 img {
   width: 100%;
 }
@@ -88,7 +92,6 @@ img {
 
 .grid {
   display: grid;
-  gap: 15px;
   grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
 }
 

@@ -80,6 +80,7 @@
 >
   <mat-card
     *ngFor="let card of game?.cards; trackBy: trackByFn"
+    class="card"
     [ngClass]="{
       outline: showTeams || game?.teamWon !== 0,
       show: card.selected,
