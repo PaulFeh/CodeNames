@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Subject } from 'rxjs';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, throttleTime } from 'rxjs/operators';
 import { GameService } from '../game.service';
 
 @UntilDestroy()
@@ -22,7 +22,7 @@ export class NewGamePageComponent implements OnInit {
         tap(() => {
           this.gameNotFound = false;
         }),
-        debounceTime(250),
+        throttleTime(250),
         switchMap((val) => {
           if (val) {
             return this.gameService.getGameId(val.toLocaleUpperCase());
