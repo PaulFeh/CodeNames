@@ -28,6 +28,15 @@ export interface Card {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameBoardComponent implements OnInit, OnChanges {
+  @ViewChild('roomCode')
+  roomCodeTemplate: TemplateRef<any> | undefined;
+  @Input()
+  game: Game | undefined | null;
+  @Output()
+  updateGameEvent = new EventEmitter<Game>();
+  @Output()
+  newGameEvent = new EventEmitter<string>();
+
   totalCards = 20;
   showTeams = false;
   showCode = false;
@@ -50,16 +59,6 @@ export class GameBoardComponent implements OnInit, OnChanges {
   get cardsLeftTeam2(): Card[] {
     return this.cardsTeam2?.filter((card) => card.selected === false);
   }
-
-  @ViewChild('roomCode')
-  roomCodeTemplate: TemplateRef<any> | undefined;
-
-  @Input()
-  game: Game | undefined | null;
-  @Output()
-  updateGameEvent = new EventEmitter<Game>();
-  @Output()
-  newGameEvent = new EventEmitter<string>();
 
   constructor(private dialog: MatDialog) {}
 

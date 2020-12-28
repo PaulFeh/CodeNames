@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Game, GameService } from '../game.service';
 
@@ -12,20 +11,13 @@ export class GamePageComponent implements OnInit {
   gameId$ = this.route.paramMap.pipe(
     map((params) => {
       const id = params.get('gameId');
-      if (id) {
-        return id;
-      }
 
-      return '';
+      return id ? id : '';
     })
   );
 
   currentGame$ = this.gameId$.pipe(
-    switchMap((id) =>
-      typeof id === 'string'
-        ? this.gameService.getCurrentGame(id).valueChanges()
-        : of(null)
-    ),
+    switchMap((id) => this.gameService.getCurrentGame(id).valueChanges()),
     tap((game) => {
       if (!game) {
         this.router.navigate([''], { state: { notFound: true } });
