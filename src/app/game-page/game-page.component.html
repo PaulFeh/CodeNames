@@ -2,6 +2,6 @@
   <app-game-board
     [game]="game"
     (updateGameEvent)="updateGame($event)"
-    (newGameEvent)="newGame($event)"
+    (newGameEvent)="newGame(getStartTeam(game), $event)"
   ></app-game-board>
 </ng-container>

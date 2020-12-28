@@ -27,12 +27,13 @@ export class GameService {
     private pictureService: PictureService
   ) {}
 
-  createNewGame(code?: string): Observable<string> {
+  createNewGame(startTeam: number, code?: string): Observable<string> {
     const length = 6;
     const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     const newGame = this.generateGame(
-      code ? code : randomString(length, values)
+      code ? code : randomString(length, values),
+      startTeam
     );
     if (code) {
       this.currentGame?.set(newGame);
@@ -68,8 +69,12 @@ export class GameService {
     return from(this.afs.doc<Game>(`games/${id}`).update(updatedGame));
   }
 
-  private generateGame(code: string, totalCards: number = 20): Game {
-    const game: Game = { code, teamTurn: 1, teamWon: 0, cards: [] };
+  private generateGame(
+    code: string,
+    startTeam: number = 1,
+    totalCards: number = 20
+  ): Game {
+    const game: Game = { code, teamTurn: startTeam, teamWon: 0, cards: [] };
 
     let startId = 0;
     const numTeamCards = 7;
@@ -89,7 +94,7 @@ export class GameService {
       game.cards.push({
         pictureUrl: images[startId],
         id: startId++,
-        team: 1,
+        team: startTeam,
         assassin: false,
         selected: false,
       });
@@ -100,7 +105,7 @@ export class GameService {
       game.cards.push({
         pictureUrl: images[startId],
         id: startId++,
-        team: 2,
+        team: startTeam === 1 ? 2 : 1,
         assassin: false,
         selected: false,
       });

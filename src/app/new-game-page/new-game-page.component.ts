@@ -27,7 +27,7 @@ export class NewGamePageComponent implements OnInit {
           if (val) {
             return this.gameService.getGameId(val.toLocaleUpperCase());
           } else {
-            return this.gameService.createNewGame();
+            return this.gameService.createNewGame(1);
           }
         }),
         tap((id) => {

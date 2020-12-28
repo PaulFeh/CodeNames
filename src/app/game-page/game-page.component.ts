@@ -42,7 +42,17 @@ export class GamePageComponent implements OnInit {
       .subscribe();
   }
 
-  newGame(gameCode: string): void {
-    this.gameService.createNewGame(gameCode).pipe(take(1)).subscribe();
+  newGame(startTeam: number, gameCode: string): void {
+    this.gameService
+      .createNewGame(startTeam, gameCode)
+      .pipe(take(1))
+      .subscribe();
+  }
+
+  getStartTeam(game: Game): number {
+    const team1Count = game.cards.filter((card) => card.team === 1).length;
+    const team2Count = game.cards.filter((card) => card.team === 2).length;
+
+    return team1Count > team2Count ? 2 : 1;
   }
 }
