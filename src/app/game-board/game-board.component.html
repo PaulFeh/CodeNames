@@ -121,7 +121,7 @@
     (click)="clickedCard(card)"
   >
     <mat-card-content>
-      <img [src]="card.pictureUrl" alt="" />
+      <img [src]="card.pictureUrl" />
     </mat-card-content>
   </mat-card>
 
@@ -141,7 +141,7 @@
     *ngIf="game?.teamWon !== 0"
     (click)="newGame()"
     mat-fab
-    matTooltip="End Turn"
+    matTooltip="New Game"
     [color]="game?.teamTurn === 1 ? 'primary' : 'accent'"
     class="md-fab-bottom-right2"
     fxHide.gt-sm
