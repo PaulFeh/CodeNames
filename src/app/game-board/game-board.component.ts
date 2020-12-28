@@ -7,7 +7,10 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  ViewChild,
+  TemplateRef,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Game } from '../game.service';
 
 export interface Card {
@@ -48,6 +51,9 @@ export class GameBoardComponent implements OnInit, OnChanges {
     return this.cardsTeam2?.filter((card) => card.selected === false);
   }
 
+  @ViewChild('roomCode')
+  roomCodeTemplate: TemplateRef<any> | undefined;
+
   @Input()
   game: Game | undefined | null;
   @Output()
@@ -55,7 +61,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
   @Output()
   newGameEvent = new EventEmitter<string>();
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -117,6 +123,12 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
 
     return winningTeam;
+  }
+
+  viewRoomCode(): void {
+    if (this.roomCodeTemplate) {
+      this.dialog.open(this.roomCodeTemplate);
+    }
   }
 
   trackByFn(index: number, item: Card): number {

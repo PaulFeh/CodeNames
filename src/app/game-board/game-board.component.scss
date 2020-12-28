@@ -29,7 +29,6 @@ img {
 }
 
 .game-code {
-  font-size: 0.75em;
   span {
     padding-left: 10px;
   }
@@ -40,7 +39,7 @@ img {
 }
 
 .winner {
-  font-size: 3em;
+  font-size: 2em;
 }
 
 .red-background {
@@ -108,4 +107,12 @@ mat-toolbar.red {
 
 mat-toolbar.blue {
   background-color: $team2Color3;
+}
+
+.md-fab-bottom-right2 {
+  top: auto !important;
+  right: 20px !important;
+  bottom: 10px !important;
+  left: auto !important;
+  position: fixed !important;
 }

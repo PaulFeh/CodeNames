@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -48,6 +51,9 @@ const firebaseConfig = {
     MatInputModule,
     MatChipsModule,
     MatIconModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatDialogModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,
