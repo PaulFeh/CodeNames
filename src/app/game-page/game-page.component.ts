@@ -11,7 +11,7 @@ import { Game, GameService } from '../game.service';
 export class GamePageComponent implements OnInit {
   gameId$ = this.route.paramMap.pipe(
     map((params) => {
-      let id = params.get('gameId');
+      const id = params.get('gameId');
       if (id) {
         return id;
       }
@@ -41,7 +41,7 @@ export class GamePageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  updateGame(game: Game) {
+  updateGame(game: Game): void {
     this.gameId$
       .pipe(
         switchMap((id) => this.gameService.updateGame(game, id)),
@@ -50,7 +50,7 @@ export class GamePageComponent implements OnInit {
       .subscribe();
   }
 
-  newGame(gameCode: string) {
-    this.gameService.newGame(gameCode).pipe(take(1)).subscribe();
+  newGame(gameCode: string): void {
+    this.gameService.createNewGame(gameCode).pipe(take(1)).subscribe();
   }
 }

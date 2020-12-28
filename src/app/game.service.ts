@@ -27,19 +27,21 @@ export class GameService {
     private pictureService: PictureService
   ) {}
 
-  newGame(code?: string): Observable<string> {
+  createNewGame(code?: string): Observable<string> {
     const length = 6;
     const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    const game = this.generateGame(code ? code : randomString(length, values));
+    const newGame = this.generateGame(
+      code ? code : randomString(length, values)
+    );
     if (code) {
-      this.currentGame?.set(game);
+      this.currentGame?.set(newGame);
       return of(code);
     } else {
-      return from(this.afs.collection<Game>('games').add(game)).pipe(
+      return from(this.afs.collection<Game>('games').add(newGame)).pipe(
         map((game) => game.id),
         tap((id) => {
-          this.afs.doc('gameIds/abc').update({ [game.code]: id });
+          this.afs.doc('gameIds/abc').update({ [newGame.code]: id });
         })
       );
     }
@@ -57,19 +59,19 @@ export class GameService {
       );
   }
 
-  getCurrentGame(id: string) {
+  getCurrentGame(id: string): AngularFirestoreDocument<Game> {
     this.currentGame = this.afs.doc<Game>(`games/${id}`);
     return this.currentGame;
   }
 
-  updateGame(updatedGame: Game, id: string) {
+  updateGame(updatedGame: Game, id: string): Observable<void> {
     return from(this.afs.doc<Game>(`games/${id}`).update(updatedGame));
   }
 
-  private generateGame(key: string, totalCards: number = 20) {
-    let game: Game = { code: key, teamTurn: 1, teamWon: 0, cards: [] };
+  private generateGame(code: string, totalCards: number = 20): Game {
+    const game: Game = { code, teamTurn: 1, teamWon: 0, cards: [] };
 
-    let cards = game.cards;
+    const cards = game.cards;
     let startId = 0;
     const numTeamCards = 7;
     const images = this.pictureService.getImages(totalCards);
@@ -121,10 +123,10 @@ export class GameService {
     return game;
   }
 
-  private shuffle(array: Card[]) {
-    var currentIndex = array.length,
-      temporaryValue,
-      randomIndex;
+  private shuffle<T>(array: T[]): T[] {
+    let currentIndex = array.length;
+    let temporaryValue: T;
+    let randomIndex: number;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {

@@ -29,18 +29,22 @@ export class GameBoardComponent implements OnInit, OnChanges {
   showTeams = false;
   showCode = false;
 
-  get cardsTeam1() {
-    return this.game?.cards.filter((card) => card.team === 1);
+  get cardsTeam1(): Card[] {
+    return this.game?.cards
+      ? this.game.cards.filter((card) => card.team === 1)
+      : [];
   }
-  get cardsLeftTeam1() {
+  get cardsLeftTeam1(): Card[] {
     return this.cardsTeam1?.filter((card) => card.selected === false);
   }
 
-  get cardsTeam2() {
-    return this.game?.cards.filter((card) => card.team === 2);
+  get cardsTeam2(): Card[] {
+    return this.game?.cards
+      ? this.game.cards.filter((card) => card.team === 2)
+      : [];
   }
 
-  get cardsLeftTeam2() {
+  get cardsLeftTeam2(): Card[] {
     return this.cardsTeam2?.filter((card) => card.selected === false);
   }
 
@@ -55,15 +59,15 @@ export class GameBoardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     // if new game reset showTeams
-    let cards: Card[] = changes.game.currentValue.cards;
+    const cards: Card[] = changes.game.currentValue.cards;
     if (cards.every((card) => !card.selected)) {
       this.showTeams = false;
     }
   }
 
-  clickedCard(card: Card) {
+  clickedCard(card: Card): void {
     if (this.showTeams || card.selected) {
       return;
     }
@@ -81,11 +85,11 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
   }
 
-  clickedShowTeams() {
+  clickedShowTeams(): void {
     this.showTeams = !this.showTeams;
   }
 
-  endTurn(update = true) {
+  endTurn(update = true): void {
     if (this.game) {
       this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
 
@@ -97,11 +101,11 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
   }
 
-  newGame() {
+  newGame(): void {
     this.newGameEvent.next(this.game?.code);
   }
 
-  gameWon(selectedCard: Card) {
+  gameWon(selectedCard: Card): number {
     let winningTeam = 0;
 
     if (selectedCard.assassin === true) {
@@ -115,7 +119,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
     return winningTeam;
   }
 
-  trackByFn(index: number, item: Card) {
+  trackByFn(index: number, item: Card): number {
     return item.id;
   }
 }

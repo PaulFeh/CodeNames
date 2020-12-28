@@ -27,7 +27,7 @@ export class NewGamePageComponent implements OnInit {
           if (val) {
             return this.gameService.getGameId(val.toLocaleUpperCase());
           } else {
-            return this.gameService.newGame();
+            return this.gameService.createNewGame();
           }
         }),
         tap((id) => {
@@ -42,11 +42,11 @@ export class NewGamePageComponent implements OnInit {
       .subscribe();
   }
 
-  newGame() {
+  newGame(): void {
     this.joinGame$.next();
   }
 
-  joinGame(code: string) {
+  joinGame(code: string): void {
     if (code && code.length === 6) {
       this.joinGame$.next(code);
     }

@@ -7,12 +7,12 @@ import { getRandomInt } from './util';
 export class PictureService {
   constructor() {}
 
-  getImages(total = 20) {
+  getImages(total = 20): string[] {
     const images = new Set<number>();
     const totalImages = 100;
 
     while (images.size < total) {
-      let rand = getRandomInt(1, totalImages);
+      const rand = getRandomInt(1, totalImages);
       const duplicates = [24, 45];
       if (!duplicates.includes(rand)) {
         images.add(rand);
