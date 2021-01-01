@@ -1,4 +1,4 @@
-<!-- <mat-toolbar
+<mat-toolbar
   class="scoreboard sticky"
   [ngClass]="{
     red: game?.teamTurn === 1,
@@ -6,20 +6,27 @@
   }"
 >
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-    <div class="score" fxLayout="row">
-      <mat-chip-list>
-        <mat-chip color="accent" selected>{{
-          cardsLeftTeam1?.length
-        }}</mat-chip>
-        -
-        <mat-chip color="primary" selected>{{
-          cardsLeftTeam2?.length
-        }}</mat-chip>
-      </mat-chip-list>
-      <span class="turn"
-        >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
-      </span>
-    </div>
+    <span fxLayout="row" fxLayoutAlign="start center">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="clickedToggleMenu()"
+        *ngIf="isHandset"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <div class="score" fxLayout="row">
+        <mat-chip-list>
+          <mat-chip color="accent" selected>{{ team1CardCount }}</mat-chip>
+          -
+          <mat-chip color="primary" selected>{{ team2CardCount }}</mat-chip>
+        </mat-chip-list>
+        <span class="turn"
+          >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
+        </span>
+      </div>
+    </span>
 
     <div fxHide fxShow.gt-md>
       <div *ngTemplateOutlet="actions"></div>
@@ -35,11 +42,11 @@
     <button
       mat-menu-item
       *ngIf="game?.teamWon === 0"
-      (click)="clickedShowTeams()"
+      (click)="clickedRevealCards()"
     >
       <mat-icon>support_agent</mat-icon> I am Code Master
     </button>
-    <button mat-menu-item (click)="viewRoomCode()">
+    <button mat-menu-item (click)="viewRoomCodeDialog()">
       <mat-icon>visibility</mat-icon> View Room Code
     </button>
     <a mat-menu-item [routerLink]="['']"
@@ -80,75 +87,45 @@
       <button
         mat-raised-button
         *ngIf="game?.teamWon === 0"
-        (click)="clickedShowTeams()"
+        (click)="clickedRevealCards()"
       >
         <mat-icon>support_agent</mat-icon> I am Code Master
       </button>
-      <button mat-raised-button *ngIf="game?.teamWon !== 0" (click)="newGame()">
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon !== 0"
+        (click)="clickedNewGame()"
+      >
         <mat-icon>refresh</mat-icon> New Game
       </button>
-      <button mat-raised-button *ngIf="game?.teamWon === 0" (click)="endTurn()">
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon === 0"
+        (click)="clickedEndTurn()"
+      >
         <mat-icon>task_alt</mat-icon> End Turn
       </button>
     </div>
   </ng-template>
-
   <mat-toolbar-row *ngIf="game?.teamWon !== 0">
     <div class="winner">
       {{ game?.teamWon === 1 ? "Red Team Wins!" : "" }}
       {{ game?.teamWon === 2 ? "Blue Team Wins!" : "" }}
     </div>
   </mat-toolbar-row>
-</mat-toolbar> -->
+</mat-toolbar>
 
-<div
-  class="grid"
-  [ngClass]="{
-    'red-background': game?.teamTurn === 1,
-    'blue-background': game?.teamTurn === 2
-  }"
-  [@listAnimation]="game?.cards"
->
-  <mat-card
-    *ngFor="let card of game?.cards; trackBy: trackByFn"
-    class="card"
-    [ngClass]="{
-      outline: showTeams || game?.teamWon !== 0,
-      show: card.selected,
-      team1: card.team === 1,
-      team2: card.team === 2,
-      neutral: card.team === 0,
-      assassin: card.assassin
-    }"
-    (click)="clickedCard(card)"
-  >
-    <mat-card-content>
-      <img [src]="card.pictureUrl" />
-    </mat-card-content>
-  </mat-card>
-
-  <!-- <ng-container *ngIf="game?.teamWon === 0; else elseTemplate">
+<ng-template #roomCode>
+  <h1 mat-dialog-title align="center">Room Code: {{ game?.code }}</h1>
+  <div mat-dialog-actions>
     <button
-      (click)="endTurn()"
-      mat-fab
-      matTooltip="End Turn"
-      [color]="game?.teamTurn === 1 ? 'primary' : 'accent'"
-      class="md-fab-bottom-right"
-      fxHide.gt-md
+      mat-raised-button
+      color="primary"
+      mat-dialog-close
+      cdkFocusInitial
+      fxFlex
     >
-      <mat-icon>task_alt</mat-icon>
+      Close
     </button>
-  </ng-container>
-  <ng-template #elseTemplate>
-    <button
-      (click)="newGame()"
-      mat-fab
-      matTooltip="New Game"
-      [color]="game?.teamTurn === 1 ? 'primary' : 'accent'"
-      class="md-fab-bottom-right"
-      fxHide.gt-md
-    >
-      <mat-icon>refresh</mat-icon>
-    </button>
-  </ng-template> -->
-</div>
+  </div>
+</ng-template>

@@ -4,6 +4,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Subject } from 'rxjs';
 import { switchMap, tap, throttleTime } from 'rxjs/operators';
 import { GameService } from '../game.service';
+import { TeamsService } from '../teams.service';
 
 @UntilDestroy()
 @Component({
@@ -14,7 +15,11 @@ export class NewGamePageComponent implements OnInit {
   gameNotFound = this.router.getCurrentNavigation()?.extras.state?.notFound;
   joinGame$ = new Subject<string>();
 
-  constructor(private router: Router, private gameService: GameService) {}
+  constructor(
+    private router: Router,
+    private gameService: GameService,
+    private teamsService: TeamsService
+  ) {}
 
   ngOnInit(): void {
     this.joinGame$
@@ -28,6 +33,7 @@ export class NewGamePageComponent implements OnInit {
             return this.gameService.getGameId(val.toLocaleUpperCase());
           } else {
             return this.gameService.createNewGame(1);
+            // .pipe(tap((id) => this.teamsService.initTeams(id)));
           }
         }),
         tap((id) => {

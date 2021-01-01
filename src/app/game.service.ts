@@ -14,6 +14,7 @@ export interface Game {
   cards: Card[];
   teamTurn: number;
   teamWon: number;
+  teams?: { 1: string[]; 2: string[] };
 }
 
 @Injectable({
@@ -66,7 +67,55 @@ export class GameService {
   }
 
   updateGame(updatedGame: Game, id: string): Observable<void> {
-    return from(this.afs.doc<Game>(`games/${id}`).update(updatedGame));
+    return from(this.getCurrentGame(id).update(updatedGame));
+  }
+
+  endTurn(game: Game, id: string, update = true): void {
+    if (game) {
+      game.teamTurn = game?.teamTurn === 1 ? 2 : 1;
+
+      if (update) {
+        this.updateGame(game, id);
+      }
+    }
+  }
+
+  selectCard(card: Card, game: Game, id: string): void {
+    // if (this.showTeams || card.selected) {
+    //   return;
+    // }
+
+    if (game?.teamWon === 0) {
+      card.selected = true;
+      game.teamWon = this.gameWon(card, game);
+      if (game?.teamTurn !== card.team) {
+        this.endTurn(game, id, false);
+      }
+
+      this.updateGame(game, id);
+    }
+  }
+
+  private gameWon(selectedCard: Card, game: Game): number {
+    let winningTeam = 0;
+
+    if (selectedCard.assassin === true) {
+      winningTeam = game?.teamTurn === 1 ? 2 : 1;
+    } else if (
+      game.cards
+        .filter((card) => card.team === 1)
+        .every((card) => card.selected === true)
+    ) {
+      winningTeam = 1;
+    } else if (
+      game.cards
+        .filter((card) => card.team === 2)
+        .every((card) => card.selected === true)
+    ) {
+      winningTeam = 2;
+    }
+
+    return winningTeam;
   }
 
   private generateGame(

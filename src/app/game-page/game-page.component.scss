@@ -1,0 +1,81 @@
+@import "../../variables";
+
+$sidebar-width: 225px;
+
+.red-team {
+  background-color: $team1Color3;
+  opacity: 1;
+}
+.blue-team {
+  background-color: $team2Color3;
+  opacity: 1;
+}
+
+.sidenav-container {
+  top: 64px;
+  height: 100%;
+}
+
+.sidenav-container.mobile {
+  top: 56px;
+}
+
+.sidenav {
+  width: $sidebar-width;
+  .mat-toolbar {
+    // background: inherit;
+  }
+}
+
+.main {
+  width: calc(100% - #{$sidebar-width});
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+
+.main.mobile {
+  width: calc(100%);
+}
+
+.md-fab-bottom-right {
+  right: 1em !important;
+  bottom: 1em !important;
+  position: fixed !important;
+}
+
+// .teams {
+//     h2 {
+//       margin-left: 1em;
+//     }
+// }
+
+mat-sidenav {
+  ul.reset,
+  ul.reset li,
+  ul.reset ul li {
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+    text-indent: 0;
+    list-style-type: none;
+  }
+  ul {
+    margin: 0;
+  }
+
+  //   li {
+  //     margin-left: 1em;
+  //   }
+
+  //   div {
+  //     margin-left: 1em;
+  //   }
+  .player-name {
+    padding-left: 0.5em;
+    padding-top: 0.5em;
+  }
+
+  mat-form-field {
+    width: 50%;
+  }
+}

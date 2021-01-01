@@ -1,7 +1,148 @@
-<ng-container *ngIf="currentGame$ | async as game">
-  <app-game-board
-    [game]="game"
-    (updateGameEvent)="updateGame($event)"
-    (newGameEvent)="newGame(getStartTeam(game), $event)"
-  ></app-game-board>
+<ng-container
+  *ngIf="{
+    game: (currentGame$ | async),
+    team1: (team1$ | async),
+    team2: (team2$ | async),
+    gameId: (gameId$ | async) || '',
+    isHandset: (isHandset$ | async),
+    isTeam1: (isTeam1$ | async),
+    isTeam2: (isTeam2$ | async),
+    playerName: (playerName$ | async),
+    currentTeam: (currentTeam$ | async) || 0
+  } as data"
+>
+  <mat-sidenav-container
+    class="sidenav-container"
+    [class.mobile]="isHandset$ | async"
+  >
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      [class.red-team]="data.isTeam1"
+      [class.blue-team]="data.isTeam2"
+      fixedInViewport
+      [attr.role]="data.isHandset ? 'dialog' : 'navigation'"
+      [mode]="data.isHandset ? 'over' : 'side'"
+      [opened]="data.isHandset === false"
+      fxLayout="column"
+    >
+      <mat-toolbar [color]="data.isTeam2 ? 'primary' : 'accent'"
+        >Cipher Title Paintings</mat-toolbar
+      >
+      <div
+        class="player-name"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+      >
+        <!-- <ng-container *ngIf="!editNameMode; else elseTemplate">
+          Hey {{ data.playerName | uppercase }}!
+          <button mat-icon-button (click)="editNameMode = !editNameMode">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </ng-container> -->
+        <ng-container *ngIf="data.playerName">
+          Hey {{ data.playerName | uppercase }}!
+        </ng-container>
+        <ng-template #elseTemplate>
+          <mat-form-field>
+            <input
+              matInput
+              #name
+              placeholder="Player Name"
+              maxlength="10"
+              [value]="data.playerName"
+            />
+            <mat-hint align="end">{{ name.value?.length || 0 }}/10</mat-hint>
+          </mat-form-field>
+          <button mat-icon-button (click)="setName(name.value)">
+            <mat-icon>save</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+      <div class="teams">
+        <div>
+          <button mat-button (click)="joinTeam(1)" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <span> Red Team </span>
+              <mat-icon>group_add</mat-icon>
+            </div>
+          </button>
+        </div>
+        <ul class="reset">
+          <li *ngFor="let player of data.team1">
+            {{ player.name | uppercase }}
+          </li>
+        </ul>
+        <div>
+          <button mat-button (click)="joinTeam(2)" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <span> Blue Team </span>
+              <mat-icon>group_add</mat-icon>
+            </div>
+          </button>
+        </div>
+        <ul class="reset">
+          <li *ngFor="let player of data.team2">
+            {{ player.name | uppercase }}
+          </li>
+        </ul>
+        <div>
+          <span fxFlex></span>
+          <button mat-button (click)="clearTeams(data.gameId)">
+            Clear Teams <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="main" [class.mobile]="data.isHandset || false">
+        <app-game-toobar
+          *ngIf="data.game"
+          [isHandset]="data.isHandset || false"
+          [game]="data.game"
+          (endTurn)="endTurn(data.game, data.gameId)"
+          (newGame)="newGame(getStartTeam(data.game), $event)"
+          (revealCards)="toggleSpymaster()"
+          (toggleMenu)="drawer.toggle()"
+        ></app-game-toobar>
+      </div>
+      <app-game-board
+        *ngIf="data.game"
+        [game]="data.game"
+        [showTeams]="(isSpymaster$ | async) || false"
+        [playerTeam]="data.currentTeam"
+        (updateGameEvent)="updateGame($event)"
+        (newGameEvent)="newGame(getStartTeam(data.game), $event)"
+        (cardSelectedEvent)="cardSelected($event, data.game, data.gameId)"
+      ></app-game-board>
+      <ng-container *ngIf="data.game?.teamWon === 0; else elseTemplate">
+        <ng-container *ngIf="data.game">
+          <button
+            (click)="endTurn(data.game, data.gameId)"
+            mat-fab
+            matTooltip="End Turn"
+            [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
+            class="md-fab-bottom-right"
+            fxHide.gt-md
+          >
+            <mat-icon>task_alt</mat-icon>
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <ng-container *ngIf="data.game">
+          <button
+            (click)="newGame(getStartTeam(data.game), data.gameId)"
+            mat-fab
+            matTooltip="New Game"
+            [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
+            class="md-fab-bottom-right"
+            fxHide.gt-md
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </ng-container>
+      </ng-template>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </ng-container>

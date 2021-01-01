@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -22,6 +23,12 @@ import { NewGamePageComponent } from './new-game-page/new-game-page.component';
 import { GamePageComponent } from './game-page/game-page.component';
 import { AngularFireModule } from '@angular/fire';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { NavComponent } from './nav/nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatListModule } from '@angular/material/list';
+import { GameToobarComponent } from './game-toobar/game-toobar.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +36,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     GameBoardComponent,
     NewGamePageComponent,
     GamePageComponent,
+    NavComponent,
+    GameToobarComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,13 +52,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatMenuModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSidenavModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    LayoutModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
