@@ -100,7 +100,7 @@
           *ngIf="data.game"
           [isHandset]="data.isHandset || false"
           [game]="data.game"
-          (endTurn)="endTurn(data.game, data.gameId)"
+          (endTurn)="endTurn(data.game, data.gameId, data.currentTeam)"
           (newGame)="newGame(getStartTeam(data.game), $event)"
           (revealCards)="toggleSpymaster()"
           (toggleMenu)="drawer.toggle()"
@@ -118,7 +118,7 @@
       <ng-container *ngIf="data.game?.teamWon === 0; else elseTemplate">
         <ng-container *ngIf="data.game">
           <button
-            (click)="endTurn(data.game, data.gameId)"
+            (click)="endTurn(data.game, data.gameId, data.currentTeam)"
             mat-fab
             matTooltip="End Turn"
             [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
