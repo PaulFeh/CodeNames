@@ -69,7 +69,7 @@
           </button>
         </div>
         <ul class="reset">
-          <li *ngFor="let player of data.team1">
+          <li *ngFor="let player of data.team1; trackBy: trackBy">
             {{ player.name | uppercase }}
           </li>
         </ul>
@@ -82,7 +82,7 @@
           </button>
         </div>
         <ul class="reset">
-          <li *ngFor="let player of data.team2">
+          <li *ngFor="let player of data.team2; trackBy: trackBy">
             {{ player.name | uppercase }}
           </li>
         </ul>

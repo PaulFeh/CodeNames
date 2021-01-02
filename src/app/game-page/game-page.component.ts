@@ -127,4 +127,8 @@ export class GamePageComponent implements OnInit {
       this.gameService.selectCard(card, game, id);
     }
   }
+
+  trackBy(index: number, item: { id: string; name: string }): string {
+    return item.id;
+  }
 }
