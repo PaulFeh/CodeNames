@@ -9,7 +9,6 @@ export const animals = [
   'Aphid',
   'Armadillo',
   'Asp',
-  'Ass',
   'Baboon',
   'Badger',
   'Bald Eagle',
