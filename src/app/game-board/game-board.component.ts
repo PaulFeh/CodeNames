@@ -106,7 +106,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
 
     // if new game reset showTeams
-    if (changes.game?.previousValue?.teamWon >= 0) {
+    if (changes.game?.previousValue?.teamWon > 0) {
       this.showTeams = false;
     }
   }
