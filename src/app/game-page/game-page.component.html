@@ -132,7 +132,7 @@
       <ng-template #elseTemplate>
         <ng-container *ngIf="data.game">
           <button
-            (click)="newGame(getStartTeam(data.game), data.gameId)"
+            (click)="newGame(getStartTeam(data.game), data.game.code)"
             mat-fab
             matTooltip="New Game"
             [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
