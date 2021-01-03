@@ -22,9 +22,6 @@ $sidebar-width: 225px;
 
 .sidenav {
   width: $sidebar-width;
-  .mat-toolbar {
-    // background: inherit;
-  }
 }
 
 .main {
@@ -44,12 +41,6 @@ $sidebar-width: 225px;
   position: fixed !important;
 }
 
-// .teams {
-//     h2 {
-//       margin-left: 1em;
-//     }
-// }
-
 mat-sidenav {
   ul.reset,
   ul.reset li,
@@ -63,13 +54,6 @@ mat-sidenav {
     margin: 0;
   }
 
-  //   li {
-  //     margin-left: 1em;
-  //   }
-
-  //   div {
-  //     margin-left: 1em;
-  //   }
   .player-name {
     padding-left: 0.5em;
     padding-top: 0.5em;

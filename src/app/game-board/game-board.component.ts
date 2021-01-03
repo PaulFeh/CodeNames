@@ -118,18 +118,6 @@ export class GameBoardComponent implements OnInit, OnChanges {
     this.cardSelectedEvent.emit(card);
   }
 
-  endTurn(update = true): void {
-    if (this.game) {
-      this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
-
-      if (update) {
-        this.updateGameEvent.emit({
-          ...this.game,
-        });
-      }
-    }
-  }
-
   newGame(): void {
     this.newGameEvent.next(this.game?.code);
   }
