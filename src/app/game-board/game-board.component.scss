@@ -120,3 +120,12 @@ mat-toolbar.blue {
   bottom: 1em !important;
   position: fixed !important;
 }
+
+mat-card div.id {
+  position: absolute;
+  top: 1%;
+  left: 2%;
+  background-color: $neutralColor1;
+  border-radius: 2em;
+  padding: 0.3em;
+}

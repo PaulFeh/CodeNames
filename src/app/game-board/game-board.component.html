@@ -7,7 +7,7 @@
   [@listAnimation]="game?.cards"
 >
   <mat-card
-    *ngFor="let card of game?.cards; trackBy: trackByFn"
+    *ngFor="let card of game?.cards; index as i; trackBy: trackByFn"
     class="card"
     [ngClass]="{
       outline: showTeams || game?.teamWon !== 0,
@@ -19,7 +19,10 @@
     }"
     (click)="clickedCard(card)"
   >
-    <mat-card-content>
+    <mat-card-content fxLayout="row" fxLayoutAlign="center center">
+      <div class="id">
+        <strong>{{ i + 1 }}</strong>
+      </div>
       <img [src]="card.pictureUrl" />
     </mat-card-content>
   </mat-card>
