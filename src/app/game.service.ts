@@ -80,10 +80,6 @@ export class GameService {
   }
 
   selectCard(card: Card, game: Game, id: string): void {
-    // if (this.showTeams || card.selected) {
-    //   return;
-    // }
-
     if (game?.teamWon === 0) {
       card.selected = true;
       game.teamWon = this.gameWon(card, game);
