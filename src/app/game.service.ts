@@ -56,7 +56,7 @@ export class GameService {
           )
           .valueChanges({ idField: 'id' })
       ),
-      map((val) => val[0].id)
+      map((val) => (val.length ? val[val.length - 1].id : ''))
     );
   }
 
