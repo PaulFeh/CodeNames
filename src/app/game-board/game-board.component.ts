@@ -19,7 +19,6 @@ import {
   TemplateRef,
   ChangeDetectorRef,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Game } from '../game.service';
 
 export interface Card {
@@ -70,7 +69,6 @@ export class GameBoardComponent implements OnInit, OnChanges {
   newGameEvent = new EventEmitter<string>();
 
   totalCards = 20;
-  // showTeams = false;
   showCode = false;
 
   get cardsTeam1(): Card[] {
@@ -92,10 +90,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
     return this.cardsTeam2?.filter((card) => card.selected === false);
   }
 
-  constructor(
-    private dialog: MatDialog,
-    private changeRef: ChangeDetectorRef
-  ) {}
+  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {}
 
@@ -121,23 +116,7 @@ export class GameBoardComponent implements OnInit, OnChanges {
     }
 
     this.cardSelectedEvent.emit(card);
-
-    // if (this.game?.teamWon === 0) {
-    //   card.selected = true;
-    //   this.game.teamWon = this.gameWon(card);
-    //   if (this.game?.teamTurn !== card.team) {
-    //     this.endTurn(false);
-    //   }
-
-    //   this.updateGameEvent.emit({
-    //     ...this.game,
-    //   });
-    // }
   }
-
-  // clickedShowTeams(): void {
-  //   this.showTeams = !this.showTeams;
-  // }
 
   endTurn(update = true): void {
     if (this.game) {
@@ -154,26 +133,6 @@ export class GameBoardComponent implements OnInit, OnChanges {
   newGame(): void {
     this.newGameEvent.next(this.game?.code);
   }
-
-  // gameWon(selectedCard: Card): number {
-  //   let winningTeam = 0;
-
-  //   if (selectedCard.assassin === true) {
-  //     winningTeam = this.game?.teamTurn === 1 ? 2 : 1;
-  //   } else if (this.cardsTeam1?.every((card) => card.selected === true)) {
-  //     winningTeam = 1;
-  //   } else if (this.cardsTeam2?.every((card) => card.selected === true)) {
-  //     winningTeam = 2;
-  //   }
-
-  //   return winningTeam;
-  // }
-
-  // viewRoomCode(): void {
-  //   if (this.roomCodeTemplate) {
-  //     this.dialog.open(this.roomCodeTemplate);
-  //   }
-  // }
 
   trackByFn(index: number, item: Card): number {
     return item.id;
