@@ -95,8 +95,20 @@
           </button>
         </div>
         <ul class="reset">
-          <li *ngFor="let player of data.team2; trackBy: trackBy">
-            {{ player.name | uppercase }}
+          <li
+            *ngFor="let player of data.team2; trackBy: trackBy"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+          >
+            <mat-icon>{{
+              data.game?.codeMasters?.hasOwnProperty(player.id)
+                ? "support_agent"
+                : ""
+            }}</mat-icon
+            ><span
+              >{{ player.name | uppercase
+              }}{{ data.player?.id === player.id ? " (you)" : "" }}</span
+            >
           </li>
         </ul>
         <div>
