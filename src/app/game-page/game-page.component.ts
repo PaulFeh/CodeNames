@@ -61,7 +61,7 @@ export class GamePageComponent implements OnInit {
 
   isTeam1$ = this.currentTeam$.pipe(map((team) => team === 1));
   isTeam2$ = this.currentTeam$.pipe(map((team) => team === 2));
-  playerName$ = this.teamsService.getName();
+  player$ = this.teamsService.getCurrentUser();
 
   isSpymaster$ = new BehaviorSubject<boolean>(false);
 
@@ -152,8 +152,11 @@ export class GamePageComponent implements OnInit {
     }
   }
 
-  toggleSpymaster(): void {
+  toggleSpymaster(playerId: string, game: Game, gameId: string): void {
     this.isSpymaster$.next(!this.isSpymaster$.value);
+    if (!game.codeMasters.hasOwnProperty(playerId)) {
+      this.gameService.addSpyMaster(playerId, game, gameId);
+    }
   }
 
   cardSelected(card: Card, game: Game, id: string): void {

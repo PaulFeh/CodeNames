@@ -7,7 +7,7 @@
     isHandset: (isHandset$ | async),
     isTeam1: (isTeam1$ | async),
     isTeam2: (isTeam2$ | async),
-    playerName: (playerName$ | async),
+    player: (player$ | async),
     currentTeam: (currentTeam$ | async) || 0
   } as data"
 >
@@ -41,9 +41,9 @@
           </button>
         </ng-container> -->
         <!-- name: {{ data.playerName }} -->
-        <ng-container *ngIf="data.playerName">
+        <!-- <ng-container *ngIf="data.player">
           Hey {{ data.playerName | uppercase }}!
-        </ng-container>
+        </ng-container> -->
         <ng-template #editNameTemplate>
           <mat-form-field>
             <input
@@ -51,7 +51,7 @@
               #name
               placeholder="Player Name"
               maxlength="10"
-              [value]="data.playerName"
+              [value]="data.player"
             />
             <mat-hint align="end">{{ name.value?.length || 0 }}/10</mat-hint>
           </mat-form-field>
@@ -70,8 +70,20 @@
           </button>
         </div>
         <ul class="reset">
-          <li *ngFor="let player of data.team1; trackBy: trackBy">
-            {{ player.name | uppercase }}
+          <li
+            *ngFor="let player of data.team1; trackBy: trackBy"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+          >
+            <mat-icon>{{
+              data.game?.codeMasters?.hasOwnProperty(player.id)
+                ? "support_agent"
+                : ""
+            }}</mat-icon
+            ><span
+              >{{ player.name | uppercase
+              }}{{ data.player?.id === player.id ? " (you)" : "" }}</span
+            >
           </li>
         </ul>
         <div>
@@ -98,12 +110,14 @@
     <mat-sidenav-content>
       <div class="main" [class.mobile]="data.isHandset || false">
         <app-game-toobar
-          *ngIf="data.game"
+          *ngIf="data.game && data.player"
           [isHandset]="data.isHandset || false"
           [game]="data.game"
           (endTurn)="endTurn(data.game, data.gameId, data.currentTeam)"
           (newGame)="newGame(getStartTeam(data.game), $event)"
-          (revealCards)="toggleSpymaster()"
+          (revealCards)="
+            toggleSpymaster(data.player?.id || '', data.game, data.gameId)
+          "
           (toggleMenu)="drawer.toggle()"
         ></app-game-toobar>
       </div>

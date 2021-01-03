@@ -15,6 +15,7 @@ export interface Game {
   teamTurn: number;
   teamWon: number;
   teams?: { 1: string[]; 2: string[] };
+  codeMasters: { [x: string]: boolean };
 }
 
 @Injectable({
@@ -96,6 +97,14 @@ export class GameService {
     }
   }
 
+  addSpyMaster(playerId: string, game: Game, gameId: string): void {
+    if (game?.teamWon === 0) {
+      game.codeMasters[playerId] = true;
+
+      this.updateGame(game, gameId);
+    }
+  }
+
   private gameWon(selectedCard: Card, game: Game): number {
     let winningTeam = 0;
 
@@ -123,7 +132,13 @@ export class GameService {
     startTeam: number = 1,
     totalCards: number = 20
   ): Game {
-    const game: Game = { code, teamTurn: startTeam, teamWon: 0, cards: [] };
+    const game: Game = {
+      code,
+      teamTurn: startTeam,
+      teamWon: 0,
+      cards: [],
+      codeMasters: {},
+    };
 
     let startId = 0;
     const numTeamCards = 7;
