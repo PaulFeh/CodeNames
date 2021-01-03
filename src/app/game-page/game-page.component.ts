@@ -1,8 +1,16 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import {
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { Card } from '../game-board/game-board.component';
 import { Game, GameService } from '../game.service';
 import { TeamsService } from '../teams.service';
@@ -12,6 +20,8 @@ import { TeamsService } from '../teams.service';
   styleUrls: ['./game-page.component.scss'],
 })
 export class GamePageComponent implements OnInit {
+  @ViewChild('joinTeamTemplate')
+  joinTeamTemplate: TemplateRef<number> | undefined;
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -62,10 +72,34 @@ export class GamePageComponent implements OnInit {
     private gameService: GameService,
     private teamsService: TeamsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentTeam$
+      .pipe(
+        take(1),
+        switchMap((team) => {
+          if (!(team >= 0)) {
+            if (this.joinTeamTemplate && this.dialog.openDialogs.length === 0) {
+              return this.dialog
+                .open(this.joinTeamTemplate, { minWidth: 300 })
+                .afterClosed();
+            }
+          }
+          return of(0);
+        }),
+        withLatestFrom(this.gameId$),
+        switchMap(([team, id]) => {
+          if (team > 0) {
+            return this.teamsService.joinTeam(id, team);
+          }
+          return of(0);
+        })
+      )
+      .subscribe();
+  }
 
   updateGame(game: Game): void {
     this.gameId$

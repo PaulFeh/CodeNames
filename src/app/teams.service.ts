@@ -3,6 +3,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import {
+  distinctUntilChanged,
+  filter,
   map,
   shareReplay,
   switchMap,
@@ -25,13 +27,18 @@ export class TeamsService {
   setName(name: string): Observable<boolean> {
     return this.auth.user.pipe(
       tap((user) => user?.updateProfile({ displayName: name })),
+      tap((user) => user?.reload()),
       map((user) => (user ? true : false)),
       take(1)
     );
   }
 
   getName(): Observable<string> {
-    return this.auth.user.pipe(map((user) => user?.displayName || ''));
+    return this.auth.user.pipe(
+      filter((user) => user !== null),
+      distinctUntilChanged(),
+      map((user) => user?.displayName || '')
+    );
   }
 
   initTeams(gameId: string, teams: Teams = { 1: {}, 2: {} }): void {

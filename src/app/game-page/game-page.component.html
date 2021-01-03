@@ -40,10 +40,11 @@
             <mat-icon>edit</mat-icon>
           </button>
         </ng-container> -->
+        <!-- name: {{ data.playerName }} -->
         <ng-container *ngIf="data.playerName">
           Hey {{ data.playerName | uppercase }}!
         </ng-container>
-        <ng-template #elseTemplate>
+        <ng-template #editNameTemplate>
           <mat-form-field>
             <input
               matInput
@@ -146,3 +147,18 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </ng-container>
+
+<ng-template #joinTeamTemplate>
+  <h2 mat-dialog-title fxLayoutAlign="space-between center">Join Team</h2>
+  <mat-dialog-content
+    ><div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
+      <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
+        Red Team
+      </button>
+      <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
+        Blue Team
+      </button>
+      <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
+    </div>
+  </mat-dialog-content>
+</ng-template>

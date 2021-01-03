@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { adjectives } from './adjectives';
 import { animals } from './animals';
-import { TeamsService } from './teams.service';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +10,16 @@ import { TeamsService } from './teams.service';
 })
 export class AppComponent {
   title = 'code-names';
-  constructor(
-    private auth: AngularFireAuth,
-    private teamsService: TeamsService
-  ) {
-    const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const randomAanimal = animals[Math.floor(Math.random() * animals.length)];
+  constructor(private auth: AngularFireAuth) {
     auth.signInAnonymously().then((user) => {
       if (!user.user?.displayName) {
-        teamsService.setName(`${randomAdj} ${randomAanimal}`).subscribe();
+        const randomAdj =
+          adjectives[Math.floor(Math.random() * adjectives.length)];
+        const randomAanimal =
+          animals[Math.floor(Math.random() * animals.length)];
+        user.user?.updateProfile({
+          displayName: `${randomAdj} ${randomAanimal}`,
+        });
       }
     });
   }

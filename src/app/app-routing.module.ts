@@ -4,7 +4,10 @@ import { GamePageComponent } from './game-page/game-page.component';
 import { NewGamePageComponent } from './new-game-page/new-game-page.component';
 
 const routes: Routes = [
-  { path: ':gameId', component: GamePageComponent },
+  {
+    path: ':gameId',
+    component: GamePageComponent,
+  },
   {
     path: '',
     component: NewGamePageComponent,
