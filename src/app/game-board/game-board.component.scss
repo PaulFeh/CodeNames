@@ -71,17 +71,23 @@ img {
 
 .show.team1 {
   background-color: $team1Color1;
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .show.team2 {
   background-color: $team2Color1;
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .show.neutral {
   background-color: $neutralColor1;
-  opacity: 0.3;
+  opacity: 0.6;
+}
+
+.show {
+  img {
+    opacity: 0.5;
+  }
 }
 
 .show.assassin {
