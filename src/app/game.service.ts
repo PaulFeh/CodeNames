@@ -4,7 +4,7 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { from, Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Card } from './game-board/game-board.component';
 import { PictureService } from './picture.service';
 import { randomString, shuffle } from './util';
@@ -42,24 +42,22 @@ export class GameService {
       return of(code);
     } else {
       return from(this.afs.collection<Game>('games').add(newGame)).pipe(
-        map((game) => game.id),
-        tap((id) => {
-          this.afs.doc('gameIds/abc').update({ [newGame.code]: id });
-        })
+        map((game) => game.id)
       );
     }
   }
 
   getGameId(code: string): Observable<string> {
-    return this.afs
-      .doc<{ [key: string]: string }>('gameIds/abc')
-      .get()
-      .pipe(
-        map((doc) => {
-          const key = doc.get(code);
-          return key ? key : '';
-        })
-      );
+    return of(code).pipe(
+      switchMap((val) =>
+        this.afs
+          .collection<{ code: string }>('games', (ref) =>
+            ref.where('code', '==', val)
+          )
+          .valueChanges({ idField: 'id' })
+      ),
+      map((val) => val[0].id)
+    );
   }
 
   getCurrentGame(id: string): AngularFirestoreDocument<Game> {
