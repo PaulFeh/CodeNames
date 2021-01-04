@@ -9,12 +9,13 @@
     isTeam1: (isTeam1$ | async),
     isTeam2: (isTeam2$ | async),
     player: (player$ | async),
-    currentTeam: (currentTeam$ | async) || 0
+    currentTeam: (currentTeam$ | async) || 0,
+    isSpymaster: (isSpymaster$ | async)
   } as data"
 >
   <mat-sidenav-container
     class="sidenav-container"
-    [class.mobile]="isHandset$ | async"
+    [class.mobile]="data.isHandset"
   >
     <mat-sidenav
       #drawer
@@ -34,33 +35,7 @@
         class="player-name"
         fxLayout="row"
         fxLayoutAlign="space-between center"
-      >
-        <!-- <ng-container *ngIf="!editNameMode; else elseTemplate">
-          Hey {{ data.playerName | uppercase }}!
-          <button mat-icon-button (click)="editNameMode = !editNameMode">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </ng-container> -->
-        <!-- name: {{ data.playerName }} -->
-        <!-- <ng-container *ngIf="data.player">
-          Hey {{ data.playerName | uppercase }}!
-        </ng-container> -->
-        <ng-template #editNameTemplate>
-          <mat-form-field>
-            <input
-              matInput
-              #name
-              placeholder="Player Name"
-              maxlength="10"
-              [value]="data.player"
-            />
-            <mat-hint align="end">{{ name.value?.length || 0 }}/10</mat-hint>
-          </mat-form-field>
-          <button mat-icon-button (click)="setName(name.value)">
-            <mat-icon>save</mat-icon>
-          </button>
-        </ng-template>
-      </div>
+      ></div>
       <div class="teams">
         <div>
           <button mat-button (click)="joinTeam(1)" fxFlex>
@@ -137,7 +112,7 @@
       <app-game-board
         *ngIf="data.game"
         [game]="data.game"
-        [showTeams]="(isSpymaster$ | async) || false"
+        [showTeams]="data.isSpymaster || false"
         [playerTeam]="data.currentTeam"
         (updateGameEvent)="updateGame($event)"
         (newGameEvent)="newGame(getStartTeam(data.game), $event)"
