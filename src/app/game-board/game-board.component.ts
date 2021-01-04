@@ -1,10 +1,25 @@
 import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
   Output,
   EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  TemplateRef,
+  ChangeDetectorRef,
 } from '@angular/core';
+import { Game } from '../game.service';
 
 export interface Card {
   id: number;
@@ -19,93 +34,107 @@ export interface Card {
   templateUrl: './game-board.component.html',
   styleUrls: ['./game-board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('listAnimation', [
+      transition(':enter', [
+        // each time the binding value changes
+        // query('.card', [
+        //   stagger(100, [animate('0.5s', style({ opacity: 0 }))]),
+        // ]),
+        query('.card', [
+          style({ transform: 'translateY(-100%)', opacity: 0 }),
+          stagger(
+            100,
+            animate('.1s', style({ transform: 'translateY(0)', opacity: '*' }))
+          ),
+        ]),
+      ]),
+    ]),
+  ],
 })
-export class GameBoardComponent implements OnInit {
-  cards: Card[] = [];
-  totalCards = 20;
-  showTeams = false;
-
+export class GameBoardComponent implements OnInit, OnChanges {
+  @ViewChild('roomCode')
+  roomCodeTemplate: TemplateRef<any> | undefined;
+  @Input()
+  game: Game | undefined | null;
+  @Input()
+  showTeams = true;
+  @Input()
+  playerTeam = 0;
   @Output()
-  cardSelected: EventEmitter<Card> = new EventEmitter();
-  constructor() {}
+  updateGameEvent = new EventEmitter<Game>();
+  @Output()
+  cardSelectedEvent = new EventEmitter<Card>();
+  @Output()
+  newGameEvent = new EventEmitter<string>();
 
-  ngOnInit(): void {
-    this.generateBoard(this.totalCards);
+  totalCards = 20;
+  showCode = false;
+
+  get cardsTeam1(): Card[] {
+    return this.game?.cards
+      ? this.game.cards.filter((card) => card.team === 1)
+      : [];
+  }
+  get cardsLeftTeam1(): Card[] {
+    return this.cardsTeam1?.filter((card) => card.selected === false);
   }
 
-  generateBoard(totalCards: number = 20) {
-    let startId = 0;
-    const numTeamCards= 7
+  get cardsTeam2(): Card[] {
+    return this.game?.cards
+      ? this.game.cards.filter((card) => card.team === 2)
+      : [];
+  }
 
-    this.cards.push({
-      id: startId++,
-      pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-      team: -1,
-      assassin: true,
-      selected: false,
-    });
+  get cardsLeftTeam2(): Card[] {
+    return this.cardsTeam2?.filter((card) => card.selected === false);
+  }
 
-    for (let index = 0; index < numTeamCards; index++) {
-      this.cards.push({
-        id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-        team: 0,
-        assassin: false,
-        selected: false,
-      });
-    }
-    for (let index = 0; index < numTeamCards+1; index++) {
-      this.cards.push({
-        id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-        team: 1,
-        assassin: false,
-        selected: false,
-      });
-    }
-    for (let index = 0; index < totalCards-2-(numTeamCards* 2 ); index++) {
-      this.cards.push({
-        id: startId++,
-        pictureUrl: `https://picsum.photos/id/${this.getRandomInt(1000)}/200/200`,
-        team: 2,
-        assassin: false,
-        selected: false,
-      });
+  constructor(private changeRef: ChangeDetectorRef) {}
+
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.showTeams) {
+      this.showTeams = changes.showTeams.currentValue;
+      this.changeRef.detectChanges();
     }
 
-    this.shuffle(this.cards);
-    console.log(this.cards.length)
+    // if new game reset showTeams
+    if (changes.game?.previousValue?.teamWon > 0) {
+      this.showTeams = false;
+    }
   }
 
-  clickedCard(card: Card) {
-    this.cardSelected.emit(card);
-    card.selected = true;
-  }
-
-  clickedShowTeams() {
-    this.showTeams = !this.showTeams;
-  }
-
-  private getRandomInt(max: number) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
-
-  private shuffle(array: Card[]) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+  clickedCard(card: Card): void {
+    if (
+      this.showTeams ||
+      card.selected ||
+      this.game?.teamTurn !== this.playerTeam
+    ) {
+      return;
     }
 
-    return array;
+    this.cardSelectedEvent.emit(card);
+  }
+
+  endTurn(update = true): void {
+    if (this.game) {
+      this.game.teamTurn = this.game?.teamTurn === 1 ? 2 : 1;
+
+      if (update) {
+        this.updateGameEvent.emit({
+          ...this.game,
+        });
+      }
+    }
+  }
+
+  newGame(): void {
+    this.newGameEvent.next(this.game?.code);
+  }
+
+  trackByFn(index: number, item: Card): number {
+    return item.id;
   }
 }

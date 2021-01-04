@@ -1,0 +1,131 @@
+<mat-toolbar
+  class="scoreboard sticky"
+  [ngClass]="{
+    red: game?.teamTurn === 1,
+    blue: game?.teamTurn === 2
+  }"
+>
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <span fxLayout="row" fxLayoutAlign="start center">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="clickedToggleMenu()"
+        *ngIf="isHandset"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <div class="score" fxLayout="row">
+        <mat-chip-list>
+          <mat-chip color="accent" selected>{{ team1CardCount }}</mat-chip>
+          -
+          <mat-chip color="primary" selected>{{ team2CardCount }}</mat-chip>
+        </mat-chip-list>
+        <span class="turn"
+          >{{ game?.teamTurn === 1 ? "Red's" : "Blue's" }} Turn
+        </span>
+      </div>
+    </span>
+
+    <div fxHide fxShow.gt-md>
+      <div *ngTemplateOutlet="actions"></div>
+    </div>
+    <a fxHide fxShow.gt-md mat-raised-button [routerLink]="['']">
+      <mat-icon>exit_to_app</mat-icon> Leave Room
+    </a>
+    <button fxHide.gt-md mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-toolbar-row>
+  <mat-menu #menu>
+    <button
+      mat-menu-item
+      *ngIf="game?.teamWon === 0"
+      (click)="clickedRevealCards()"
+    >
+      <mat-icon>support_agent</mat-icon> I am Code Master
+    </button>
+    <button mat-menu-item (click)="viewRoomCodeDialog()">
+      <mat-icon>visibility</mat-icon> View Room Code
+    </button>
+    <a mat-menu-item [routerLink]="['']"
+      ><mat-icon>exit_to_app</mat-icon> Leave Room</a
+    >
+  </mat-menu>
+
+  <ng-template #roomCode>
+    <h1 mat-dialog-title align="center">Room Code: {{ game?.code }}</h1>
+    <div mat-dialog-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        mat-dialog-close
+        cdkFocusInitial
+        fxFlex
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #gameCode>
+    <div class="game-code">
+      <button mat-raised-button (click)="showCode = !showCode">
+        <mat-icon>{{ showCode ? "visibility_off" : "visibility" }}</mat-icon>
+        {{ showCode ? "Hide" : "Show" }} Room Code
+      </button>
+      <span [hidden]="!showCode">{{ game?.code }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #actions>
+    <div class="actions" fxLayout="row" fxLayoutGap="10px">
+      <span class="" fxHide fxShow.gt-md>
+        <ng-container *ngTemplateOutlet="gameCode"></ng-container>
+      </span>
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon === 0"
+        (click)="clickedRevealCards()"
+      >
+        <mat-icon>support_agent</mat-icon> I am Code Master
+      </button>
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon !== 0"
+        (click)="clickedNewGame()"
+      >
+        <mat-icon>refresh</mat-icon> New Game
+      </button>
+      <button
+        mat-raised-button
+        *ngIf="game?.teamWon === 0"
+        (click)="clickedEndTurn()"
+      >
+        <mat-icon>task_alt</mat-icon> End Turn
+      </button>
+    </div>
+  </ng-template>
+  <mat-toolbar-row *ngIf="game?.teamWon !== 0">
+    <div class="winner">
+      {{ game?.teamWon === 1 ? "Red Team Wins!" : "" }}
+      {{ game?.teamWon === 2 ? "Blue Team Wins!" : "" }}
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<ng-template #roomCode>
+  <h1 mat-dialog-title align="center">Room Code: {{ game?.code }}</h1>
+  <div mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      mat-dialog-close
+      cdkFocusInitial
+      fxFlex
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

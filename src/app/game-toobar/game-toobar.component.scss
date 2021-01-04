@@ -1,0 +1,33 @@
+@import "../../variables";
+
+.red-background {
+  background-color: $team1Color2;
+}
+.blue-background {
+  background-color: $team2Color2;
+}
+
+mat-toolbar.red {
+  background-color: $team1Color3;
+}
+
+mat-toolbar.blue {
+  background-color: $team2Color3;
+}
+
+.scoreboard {
+  .score {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.336);
+  }
+}
+
+.turn {
+  margin-left: 0.5em;
+}
+
+.game-code {
+  span {
+    padding-left: 10px;
+  }
+}

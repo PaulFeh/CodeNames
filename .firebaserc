@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "puzzle-app-60af1": {
+      "hosting": {
+        "code-names": [
+          "puzzle-app-60af1"
+        ]
+      }
+    }
+  }
+}

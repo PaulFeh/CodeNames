@@ -1,0 +1,190 @@
+<ng-container
+  *ngIf="{
+    game: (currentGame$ | async),
+    team1: (team1$ | async),
+    team2: (team2$ | async),
+    gameId: (gameId$ | async) || '',
+    isHandset: (isHandset$ | async),
+    isTeam1: (isTeam1$ | async),
+    isTeam2: (isTeam2$ | async),
+    player: (player$ | async),
+    currentTeam: (currentTeam$ | async) || 0
+  } as data"
+>
+  <mat-sidenav-container
+    class="sidenav-container"
+    [class.mobile]="isHandset$ | async"
+  >
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      [class.red-team]="data.isTeam1"
+      [class.blue-team]="data.isTeam2"
+      fixedInViewport
+      [attr.role]="data.isHandset ? 'dialog' : 'navigation'"
+      [mode]="data.isHandset ? 'over' : 'side'"
+      [opened]="data.isHandset === false"
+      fxLayout="column"
+    >
+      <mat-toolbar [color]="data.isTeam2 ? 'primary' : 'accent'"
+        >Cipher Title Paintings</mat-toolbar
+      >
+      <div
+        class="player-name"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+      >
+        <!-- <ng-container *ngIf="!editNameMode; else elseTemplate">
+          Hey {{ data.playerName | uppercase }}!
+          <button mat-icon-button (click)="editNameMode = !editNameMode">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </ng-container> -->
+        <!-- name: {{ data.playerName }} -->
+        <!-- <ng-container *ngIf="data.player">
+          Hey {{ data.playerName | uppercase }}!
+        </ng-container> -->
+        <ng-template #editNameTemplate>
+          <mat-form-field>
+            <input
+              matInput
+              #name
+              placeholder="Player Name"
+              maxlength="10"
+              [value]="data.player"
+            />
+            <mat-hint align="end">{{ name.value?.length || 0 }}/10</mat-hint>
+          </mat-form-field>
+          <button mat-icon-button (click)="setName(name.value)">
+            <mat-icon>save</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+      <div class="teams">
+        <div>
+          <button mat-button (click)="joinTeam(1)" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <span> Red Team </span>
+              <mat-icon>group_add</mat-icon>
+            </div>
+          </button>
+        </div>
+        <ul class="reset">
+          <li
+            *ngFor="let player of data.team1; trackBy: trackBy"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+          >
+            <mat-icon>{{
+              data.game?.codeMasters?.hasOwnProperty(player.id)
+                ? "support_agent"
+                : ""
+            }}</mat-icon
+            ><span
+              >{{ player.name | uppercase
+              }}{{ data.player?.id === player.id ? " (you)" : "" }}</span
+            >
+          </li>
+        </ul>
+        <div>
+          <button mat-button (click)="joinTeam(2)" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <span> Blue Team </span>
+              <mat-icon>group_add</mat-icon>
+            </div>
+          </button>
+        </div>
+        <ul class="reset">
+          <li
+            *ngFor="let player of data.team2; trackBy: trackBy"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+          >
+            <mat-icon>{{
+              data.game?.codeMasters?.hasOwnProperty(player.id)
+                ? "support_agent"
+                : ""
+            }}</mat-icon
+            ><span
+              >{{ player.name | uppercase
+              }}{{ data.player?.id === player.id ? " (you)" : "" }}</span
+            >
+          </li>
+        </ul>
+        <div>
+          <span fxFlex></span>
+          <button mat-button (click)="clearTeams(data.gameId)">
+            Clear Teams <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="main" [class.mobile]="data.isHandset || false">
+        <app-game-toobar
+          *ngIf="data.game && data.player"
+          [isHandset]="data.isHandset || false"
+          [game]="data.game"
+          (endTurn)="endTurn(data.game, data.gameId, data.currentTeam)"
+          (newGame)="newGame(getStartTeam(data.game), $event)"
+          (revealCards)="
+            toggleSpymaster(data.player?.id || '', data.game, data.gameId)
+          "
+          (toggleMenu)="drawer.toggle()"
+        ></app-game-toobar>
+      </div>
+      <app-game-board
+        *ngIf="data.game"
+        [game]="data.game"
+        [showTeams]="(isSpymaster$ | async) || false"
+        [playerTeam]="data.currentTeam"
+        (updateGameEvent)="updateGame($event)"
+        (newGameEvent)="newGame(getStartTeam(data.game), $event)"
+        (cardSelectedEvent)="cardSelected($event, data.game, data.gameId)"
+      ></app-game-board>
+      <ng-container *ngIf="data.game?.teamWon === 0; else elseTemplate">
+        <ng-container *ngIf="data.game">
+          <button
+            (click)="endTurn(data.game, data.gameId, data.currentTeam)"
+            mat-fab
+            matTooltip="End Turn"
+            [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
+            class="md-fab-bottom-right"
+            fxHide.gt-md
+          >
+            <mat-icon>task_alt</mat-icon>
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <ng-container *ngIf="data.game">
+          <button
+            (click)="newGame(getStartTeam(data.game), data.game.code)"
+            mat-fab
+            matTooltip="New Game"
+            [color]="data.game?.teamTurn === 1 ? 'primary' : 'accent'"
+            class="md-fab-bottom-right"
+            fxHide.gt-md
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </ng-container>
+      </ng-template>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
+
+<ng-template #joinTeamTemplate>
+  <h2 mat-dialog-title fxLayoutAlign="space-between center">Join Team</h2>
+  <mat-dialog-content
+    ><div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
+      <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
+        Red Team
+      </button>
+      <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
+        Blue Team
+      </button>
+      <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
+    </div>
+  </mat-dialog-content>
+</ng-template>

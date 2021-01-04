@@ -1,9 +1,29 @@
-<button mat-stroked-button (click)="clickedShowTeams()">I am Code Master</button>
-
-<div fxLayout="row wrap" fxLayoutGap="15px">
-  <mat-card *ngFor="let card of cards" [ngClass]="{'outline' :showTeams, 'show': card.selected, 'team1': card.team===0, 'team2': card.team===1, 'neutral':  card.team ===2, 'assassin': card.assassin }" (click)="clickedCard(card)">
-    <mat-card-content>
-      <img [src]="card.pictureUrl" alt="">
+<div
+  class="grid"
+  [ngClass]="{
+    'red-background': game?.teamTurn === 1,
+    'blue-background': game?.teamTurn === 2
+  }"
+  [@listAnimation]="game?.cards"
+>
+  <mat-card
+    *ngFor="let card of game?.cards; index as i; trackBy: trackByFn"
+    class="card"
+    [ngClass]="{
+      outline: showTeams || game?.teamWon !== 0,
+      show: card.selected,
+      team1: card.team === 1,
+      team2: card.team === 2,
+      neutral: card.team === 0,
+      assassin: card.assassin
+    }"
+    (click)="clickedCard(card)"
+  >
+    <mat-card-content fxLayout="column" fxLayoutAlign="center center" fxFlex>
+      <div class="id">
+        <strong>{{ i + 1 }}</strong>
+      </div>
+      <img [src]="card.pictureUrl" />
     </mat-card-content>
   </mat-card>
 </div>

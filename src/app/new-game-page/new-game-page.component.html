@@ -1,0 +1,55 @@
+<div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <mat-toolbar color="primary">
+    <span>Cipher Title Paintings</span>
+  </mat-toolbar>
+  <mat-card class="action-card">
+    <mat-card-header fxLayout="row" fxLayoutAlign="center center">
+      <mat-card-title>New Game</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="newGame()" fxFlex>
+        Start
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="action-card">
+    <mat-card-header fxLayout="row" fxLayoutAlign="center center">
+      <mat-card-title>Join Game</mat-card-title>
+    </mat-card-header>
+    <mat-card-content fxLayout="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Room Code</mat-label>
+        <input
+          matInput
+          #roomCode
+          placeholder="ABCDEF"
+          [value]=""
+          (input)="
+            roomCode.value = roomCode.value.substring(0, 6).toUpperCase()
+          "
+        />
+        <mat-hint>6 Letters</mat-hint>
+      </mat-form-field>
+      <div
+        class="error"
+        *ngIf="gameNotFound"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+      >
+        <mat-icon>error</mat-icon> <span>Game Not Found</span>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        (click)="joinGame(roomCode.value)"
+        color="primary"
+        [disabled]="!roomCode.value || roomCode.value.length !== 6"
+        fxFlex
+      >
+        Join
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
