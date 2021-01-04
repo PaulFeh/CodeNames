@@ -1,6 +1,7 @@
 <ng-container
   *ngIf="{
     game: (currentGame$ | async),
+    teams: (teams$ | async),
     team1: (team1$ | async),
     team2: (team2$ | async),
     gameId: (gameId$ | async) || '',

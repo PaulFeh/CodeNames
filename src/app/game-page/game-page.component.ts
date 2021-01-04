@@ -65,6 +65,10 @@ export class GamePageComponent implements OnInit {
 
   isSpymaster$ = new BehaviorSubject<boolean>(false);
 
+  teams$ = this.gameId$.pipe(
+    switchMap((gameId) => this.teamsService.getTeams(gameId))
+  );
+
   editNameMode = false;
 
   constructor(
@@ -96,7 +100,8 @@ export class GamePageComponent implements OnInit {
             return this.teamsService.joinTeam(id, team);
           }
           return of(0);
-        })
+        }),
+        take(1)
       )
       .subscribe();
   }
@@ -129,7 +134,8 @@ export class GamePageComponent implements OnInit {
       .pipe(
         switchMap((id) => {
           return this.teamsService.joinTeam(id, team);
-        })
+        }),
+        take(1)
       )
       .subscribe();
   }
