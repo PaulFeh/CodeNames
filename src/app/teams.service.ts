@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of, Subject } from 'rxjs';
+import { from, Observable, of, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -46,8 +46,13 @@ export class TeamsService {
     );
   }
 
-  initTeams(gameId: string, teams: Teams = { 1: {}, 2: {} }): void {
-    this.teamsCollection.doc(gameId).set(teams);
+  initTeams(
+    gameId: string,
+    teams: Teams = { 1: {}, 2: {} }
+  ): Observable<boolean> {
+    return from(this.teamsCollection.doc(gameId).set(teams)).pipe(
+      map(() => true)
+    );
   }
 
   joinTeam(gameId: string, team: number): Observable<boolean> {
@@ -97,7 +102,7 @@ export class TeamsService {
       .valueChanges()
       .pipe(
         tap((teams) => this.teams$.next(teams)),
-        shareReplay()
+        shareReplay({ bufferSize: 1, refCount: true })
       );
   }
 

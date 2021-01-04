@@ -4,7 +4,7 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import { from, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Card } from './game-board/game-board.component';
 import { PictureService } from './picture.service';
 import { randomString, shuffle } from './util';
@@ -22,7 +22,7 @@ export interface Game {
   providedIn: 'root',
 })
 export class GameService {
-  currentGame: AngularFirestoreDocument<Game> | undefined;
+  private currentGame: AngularFirestoreDocument<Game> | undefined;
 
   constructor(
     private afs: AngularFirestore,
@@ -56,7 +56,8 @@ export class GameService {
           )
           .valueChanges({ idField: 'id' })
       ),
-      map((val) => (val.length ? val[val.length - 1].id : ''))
+      map((val) => (val.length ? val[val.length - 1].id : '')),
+      take(1)
     );
   }
 

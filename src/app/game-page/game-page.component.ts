@@ -2,19 +2,22 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
   map,
   shareReplay,
   switchMap,
   take,
   tap,
+  throttleTime,
   withLatestFrom,
 } from 'rxjs/operators';
 import { Card } from '../game-board/game-board.component';
 import { Game, GameService } from '../game.service';
 import { TeamsService } from '../teams.service';
 
+@UntilDestroy()
 @Component({
   templateUrl: './game-page.component.html',
   styleUrls: ['./game-page.component.scss'],
@@ -64,6 +67,8 @@ export class GamePageComponent implements OnInit {
   player$ = this.teamsService.getCurrentUser();
 
   isSpymaster$ = new BehaviorSubject<boolean>(false);
+  private joinTeam$ = new Subject<number>();
+  private clearTeams$ = new Subject();
 
   teams$ = this.gameId$.pipe(
     switchMap((gameId) => this.teamsService.getTeams(gameId))
@@ -101,7 +106,26 @@ export class GamePageComponent implements OnInit {
           }
           return of(0);
         }),
-        take(1)
+        take(1),
+        untilDestroyed(this)
+      )
+      .subscribe();
+
+    this.joinTeam$
+      .pipe(
+        throttleTime(3000),
+        withLatestFrom(this.gameId$),
+        switchMap(([team, id]) => this.teamsService.joinTeam(id, team)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+
+    this.clearTeams$
+      .pipe(
+        throttleTime(3000),
+        withLatestFrom(this.gameId$),
+        switchMap(([val, id]) => this.teamsService.initTeams(id)),
+        untilDestroyed(this)
       )
       .subscribe();
   }
@@ -110,7 +134,8 @@ export class GamePageComponent implements OnInit {
     this.gameId$
       .pipe(
         switchMap((id) => this.gameService.updateGame(game, id)),
-        take(1)
+        take(1),
+        untilDestroyed(this)
       )
       .subscribe();
   }
@@ -118,7 +143,7 @@ export class GamePageComponent implements OnInit {
   newGame(startTeam: number, gameCode: string): void {
     this.gameService
       .createNewGame(startTeam, gameCode)
-      .pipe(take(1))
+      .pipe(take(1), untilDestroyed(this))
       .subscribe();
   }
 
@@ -130,25 +155,21 @@ export class GamePageComponent implements OnInit {
   }
 
   joinTeam(team: number): void {
-    this.gameId$
-      .pipe(
-        switchMap((id) => {
-          return this.teamsService.joinTeam(id, team);
-        }),
-        take(1)
-      )
-      .subscribe();
+    if (team) {
+      this.joinTeam$.next(team);
+    }
   }
 
   setName(name: string): void {
     this.teamsService
       .setName(name)
+      .pipe(untilDestroyed(this))
       .subscribe(() => (this.editNameMode = false));
   }
 
   clearTeams(id: string): void {
     if (id) {
-      this.teamsService.initTeams(id);
+      this.clearTeams$.next();
     }
   }
 
