@@ -115,7 +115,7 @@
               </ng-template>
             </div>
           </li>
-          <li *ngIf="data.game">
+          <li *ngIf="data.game?.teamWon === 0">
             <strong>
               {{
                 waitingForClue(data.game)
