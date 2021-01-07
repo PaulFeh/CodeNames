@@ -183,7 +183,7 @@ export class GamePageComponent implements OnInit {
   }
 
   endTurn(game: Game, id: string, currentTeam: number): void {
-    if (game && game.teamTurn === currentTeam) {
+    if (game && game.teamTurn === currentTeam && !this.waitingForClue(game)) {
       this.gameService.endTurn(game, id);
     }
   }
