@@ -98,31 +98,33 @@
       <mat-divider> </mat-divider>
       <div class="clues">
         <h2>Clues</h2>
-        <ng-container *ngFor="let clue of data.game?.clues">
-          <div
-            [ngClass]="{ red: clue.team === 1, blue: clue.team === 2 }"
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="5px"
-          >
-            <span> {{ clue.word | uppercase }} </span>
-            <ng-container *ngIf="clue.amount === -1; else number">
-              (<mat-icon>all_inclusive</mat-icon>)
-            </ng-container>
-            <ng-template #number>
-              <span> ({{ clue.amount }}) </span>
-            </ng-template>
-          </div>
-        </ng-container>
-        <div *ngIf="data.game">
-          <strong>
-            {{
-              waitingForClue(data.game)
-                ? "(Waiting for clue...)"
-                : "(Guessing...)"
-            }}
-          </strong>
-        </div>
+        <ul class="reset">
+          <li *ngFor="let clue of data.game?.clues">
+            <div
+              [ngClass]="{ red: clue.team === 1, blue: clue.team === 2 }"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="5px"
+            >
+              <span> {{ clue.word | uppercase }} </span>
+              <ng-container *ngIf="clue.amount === -1; else number">
+                (<mat-icon>all_inclusive</mat-icon>)
+              </ng-container>
+              <ng-template #number>
+                <span> ({{ clue.amount }}) </span>
+              </ng-template>
+            </div>
+          </li>
+          <li *ngIf="data.game">
+            <strong>
+              {{
+                waitingForClue(data.game)
+                  ? "(Waiting for clue...)"
+                  : "(Guessing...)"
+              }}
+            </strong>
+          </li>
+        </ul>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
