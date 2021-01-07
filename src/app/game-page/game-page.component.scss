@@ -67,3 +67,18 @@ mat-sidenav {
 .main {
   z-index: 3;
 }
+
+.clues {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  div {
+    // margin-left: 0.5em;
+    padding: 0.25em;
+  }
+  .red {
+    background-color: $team1Color3;
+  }
+  .blue {
+    background-color: $team2Color3;
+  }
+}

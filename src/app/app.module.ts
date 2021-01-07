@@ -14,6 +14,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -53,6 +55,8 @@ import { GameToobarComponent } from './game-toobar/game-toobar.component';
     MatTooltipModule,
     MatDialogModule,
     MatSidenavModule,
+    MatSelectModule,
+    MatDividerModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,

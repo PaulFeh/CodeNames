@@ -25,12 +25,16 @@ export class GameToobarComponent implements OnInit, OnChanges {
   game: Game | undefined | null;
   @Input()
   isHandset = false;
+  @Input()
+  isClueGiver = false;
   @Output()
   revealCards = new EventEmitter<boolean>();
   @Output()
   newGame = new EventEmitter();
   @Output()
   endTurn = new EventEmitter();
+  @Output()
+  clue = new EventEmitter<{ word: string; amount: number }>();
   @Output()
   leaveGame = new EventEmitter();
   @Output()
@@ -68,6 +72,10 @@ export class GameToobarComponent implements OnInit, OnChanges {
 
   clickedLeaveGame(): void {
     this.leaveGame.emit();
+  }
+
+  clickedSubmitClue(): void {
+    this.clue.emit();
   }
 
   viewRoomCodeDialog(): void {

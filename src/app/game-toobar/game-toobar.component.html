@@ -98,13 +98,21 @@
       >
         <mat-icon>refresh</mat-icon> New Game
       </button>
-      <button
-        mat-raised-button
-        *ngIf="game?.teamWon === 0"
-        (click)="clickedEndTurn()"
-      >
-        <mat-icon>task_alt</mat-icon> End Turn
-      </button>
+
+      <ng-container *ngIf="game?.teamWon === 0">
+        <button
+          mat-raised-button
+          *ngIf="!isClueGiver; else clueGiver"
+          (click)="clickedEndTurn()"
+        >
+          <mat-icon>task_alt</mat-icon> End Turn
+        </button>
+        <ng-template #clueGiver>
+          <button mat-raised-button (click)="clickedSubmitClue()">
+            <mat-icon>search</mat-icon> Give Clue
+          </button>
+        </ng-template>
+      </ng-container>
     </div>
   </ng-template>
   <mat-toolbar-row *ngIf="game?.teamWon !== 0">

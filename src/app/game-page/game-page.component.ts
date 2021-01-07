@@ -25,6 +25,8 @@ import { TeamsService } from '../teams.service';
 export class GamePageComponent implements OnInit {
   @ViewChild('joinTeamTemplate')
   joinTeamTemplate: TemplateRef<number> | undefined;
+  @ViewChild('addClueTemplate')
+  submitClueTemplate: TemplateRef<number> | undefined;
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -72,6 +74,13 @@ export class GamePageComponent implements OnInit {
 
   teams$ = this.gameId$.pipe(
     switchMap((gameId) => this.teamsService.getTeams(gameId))
+  );
+
+  isClueGiver$ = this.currentGame$.pipe(
+    withLatestFrom(this.player$),
+    map(([game, player]) => {
+      return game?.codeMasters.hasOwnProperty(player.id);
+    })
   );
 
   editNameMode = false;
@@ -186,10 +195,33 @@ export class GamePageComponent implements OnInit {
     }
   }
 
-  cardSelected(card: Card, game: Game, id: string): void {
-    if (card && game) {
+  cardSelected(card: Card, game: Game, id: string, isCluegiver: boolean): void {
+    if (card && game && !this.waitingForClue(game) && !isCluegiver) {
       this.gameService.selectCard(card, game, id);
     }
+  }
+
+  submitClue(team: number, game: Game, id: string): void {
+    if (this.submitClueTemplate && this.dialog.openDialogs.length === 0) {
+      this.dialog
+        .open(this.submitClueTemplate)
+        .afterClosed()
+        .subscribe((val) => {
+          if (val.clue) {
+            this.gameService.addClue(
+              val.clue,
+              parseInt(val.number, 10),
+              team,
+              game,
+              id
+            );
+          }
+        });
+    }
+  }
+
+  waitingForClue(game: Game | null | undefined): boolean {
+    return game?.teamTurn !== game?.clues[game?.clues?.length - 1]?.team;
   }
 
   trackBy(index: number, item: { id: string; name: string }): string {

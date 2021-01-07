@@ -16,6 +16,7 @@ export interface Game {
   teamWon: number;
   teams?: { 1: string[]; 2: string[] };
   codeMasters: { [x: string]: boolean };
+  clues: { word: string; amount: number; team: number }[];
 }
 
 @Injectable({
@@ -62,7 +63,9 @@ export class GameService {
   }
 
   getCurrentGame(id: string): AngularFirestoreDocument<Game> {
-    this.currentGame = this.afs.doc<Game>(`games/${id}`);
+    if (this.currentGame?.ref.id !== id) {
+      this.currentGame = this.afs.doc<Game>(`games/${id}`);
+    }
     return this.currentGame;
   }
 
@@ -100,6 +103,27 @@ export class GameService {
     }
   }
 
+  addClue(
+    word: string,
+    amount: number,
+    team: number,
+    game: Game,
+    gameId: string
+  ): void {
+    if (this.canAddClue(game, team)) {
+      const updatedGame = { ...game };
+      updatedGame.clues.push({ word, amount, team });
+      this.updateGame(updatedGame, gameId);
+    }
+  }
+
+  private canAddClue(game: Game, team: number): boolean {
+    return (
+      game.teamTurn === team &&
+      game.clues[game.clues?.length - 1]?.team !== team
+    );
+  }
+
   private gameWon(selectedCard: Card, game: Game): number {
     let winningTeam = 0;
 
@@ -133,6 +157,7 @@ export class GameService {
       teamWon: 0,
       cards: [],
       codeMasters: {},
+      clues: [],
     };
 
     let startId = 0;
