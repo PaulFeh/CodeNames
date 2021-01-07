@@ -17,6 +17,7 @@ export interface Game {
   teams?: { 1: string[]; 2: string[] };
   codeMasters: { [x: string]: boolean };
   clues: { word: string; amount: number; team: number }[];
+  cardsSelected: number;
 }
 
 @Injectable({
@@ -76,6 +77,7 @@ export class GameService {
   endTurn(game: Game, id: string, update = true): void {
     if (game) {
       game.teamTurn = game?.teamTurn === 1 ? 2 : 1;
+      game.cardsSelected = 0;
 
       if (update) {
         this.updateGame(game, id);
@@ -87,7 +89,16 @@ export class GameService {
     if (game?.teamWon === 0) {
       card.selected = true;
       game.teamWon = this.gameWon(card, game);
-      if (game?.teamTurn !== card.team) {
+      game.cardsSelected += 1;
+
+      const lastClueAmount = game.clues[game.clues.length - 1].amount;
+      const maxSelectableCards =
+        lastClueAmount === -1 || lastClueAmount === 0 ? 8 : lastClueAmount + 1;
+
+      if (
+        game.cardsSelected >= maxSelectableCards ||
+        game?.teamTurn !== card.team
+      ) {
         this.endTurn(game, id, false);
       }
 
@@ -158,6 +169,7 @@ export class GameService {
       cards: [],
       codeMasters: {},
       clues: [],
+      cardsSelected: 0,
     };
 
     let startId = 0;
