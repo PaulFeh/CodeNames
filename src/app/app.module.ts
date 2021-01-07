@@ -31,6 +31,7 @@ import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatListModule } from '@angular/material/list';
 import { GameToobarComponent } from './game-toobar/game-toobar.component';
+import { NgIdleModule } from '@ng-idle/core';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { GameToobarComponent } from './game-toobar/game-toobar.component';
     }),
     LayoutModule,
     MatListModule,
+    NgIdleModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Idle } from '@ng-idle/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
@@ -91,8 +92,17 @@ export class GamePageComponent implements OnInit {
     private teamsService: TeamsService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private idle: Idle
+  ) {
+    idle.setIdle(5 * 60);
+    idle.setTimeout(10 * 60);
+    idle.onTimeout.subscribe(() => {
+      this.router.navigate(['']);
+      this.dialog.closeAll();
+    });
+    this.idle.watch();
+  }
 
   ngOnInit(): void {
     this.currentTeam$

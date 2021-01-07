@@ -101,7 +101,7 @@
         <mat-chip-list class="mat-chip-list-stacked">
           <mat-chip
             *ngFor="let clue of data.game?.clues"
-            selected="true"
+            selected
             [color]="clue.team === 1 ? 'accent' : 'primary'"
           >
             <div fxLayout="row" fxLayoutAlign="center space-between" fxFlex>
