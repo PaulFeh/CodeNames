@@ -228,6 +228,7 @@
           maxlength="20"
           required
         />
+        <mat-hint align="end">{{ clue.value.length || 0 }}/20</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-select #number placeholder="Matching Cards" [value]="1" required>
