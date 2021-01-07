@@ -97,11 +97,12 @@ export class GamePageComponent implements OnInit {
   ) {
     idle.setIdle(5 * 60);
     idle.setTimeout(10 * 60);
-    idle.onTimeout.subscribe(() => {
+    idle.onTimeout.pipe(untilDestroyed(this)).subscribe(() => {
       this.router.navigate(['']);
       this.dialog.closeAll();
+      idle.stop();
     });
-    this.idle.watch();
+    idle.watch();
   }
 
   ngOnInit(): void {
