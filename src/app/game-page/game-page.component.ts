@@ -207,7 +207,7 @@ export class GamePageComponent implements OnInit {
         .open(this.submitClueTemplate)
         .afterClosed()
         .subscribe((val) => {
-          if (val.clue) {
+          if (val?.clue) {
             this.gameService.addClue(
               val.clue,
               parseInt(val.number, 10),
