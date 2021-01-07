@@ -98,33 +98,27 @@
       <mat-divider> </mat-divider>
       <div class="clues">
         <h2>Clues</h2>
-        <ul class="reset">
-          <li *ngFor="let clue of data.game?.clues">
-            <div
-              [ngClass]="{ red: clue.team === 1, blue: clue.team === 2 }"
-              fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="5px"
-            >
-              <span> {{ clue.word | uppercase }} </span>
+        <mat-chip-list class="mat-chip-list-stacked">
+          <mat-chip
+            *ngFor="let clue of data.game?.clues"
+            selected="true"
+            [color]="clue.team === 1 ? 'accent' : 'primary'"
+          >
+            <div fxLayout="row" fxLayoutAlign="center space-between" fxFlex>
+              <span>{{ clue.word | uppercase }}</span>
+              <span fxFlex></span>
               <ng-container *ngIf="clue.amount === -1; else number">
-                (<mat-icon>all_inclusive</mat-icon>)
+                <mat-icon>all_inclusive</mat-icon>
               </ng-container>
               <ng-template #number>
-                <span> ({{ clue.amount }}) </span>
+                <span> {{ clue.amount }} </span>
               </ng-template>
             </div>
-          </li>
-          <li *ngIf="data.game?.teamWon === 0">
-            <strong>
-              {{
-                waitingForClue(data.game)
-                  ? "(Waiting for clue...)"
-                  : "(Guessing...)"
-              }}
-            </strong>
-          </li>
-        </ul>
+          </mat-chip>
+          <mat-chip *ngIf="data.game?.teamWon === 0">{{
+            waitingForClue(data.game) ? "Waiting for clue..." : "Guessing..."
+          }}</mat-chip>
+        </mat-chip-list>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
