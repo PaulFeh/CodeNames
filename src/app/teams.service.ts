@@ -37,12 +37,11 @@ export class TeamsService {
   getCurrentUser(): Observable<{ name: string; id: string }> {
     return this.auth.user.pipe(
       filter((user) => user !== null),
-      distinctUntilChanged(),
-      map((user) =>
-        user?.displayName
+      map((user) => {
+        return user?.displayName
           ? { name: user.displayName, id: user.uid }
-          : { name: '', id: '' }
-      )
+          : { name: '', id: user?.uid || '' };
+      })
     );
   }
 
