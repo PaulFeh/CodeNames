@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './game-board/game-board.component';
@@ -58,6 +59,7 @@ import { NgIdleModule } from '@ng-idle/core';
     MatSidenavModule,
     MatSelectModule,
     MatDividerModule,
+    MatSnackBarModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,

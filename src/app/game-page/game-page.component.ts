@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Idle } from '@ng-idle/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -93,7 +94,8 @@ export class GamePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private idle: Idle
+    private idle: Idle,
+    private snackbar: MatSnackBar
   ) {
     idle.setIdle(5 * 60);
     idle.setTimeout(10 * 60);
@@ -199,10 +201,16 @@ export class GamePageComponent implements OnInit {
     }
   }
 
-  toggleSpymaster(playerId: string, game: Game, gameId: string): void {
-    this.isSpymaster$.next(!this.isSpymaster$.value);
-    if (!game.codeMasters.hasOwnProperty(playerId)) {
-      this.gameService.addSpyMaster(playerId, game, gameId);
+  toggleSpymaster(
+    playerId: string | undefined,
+    game: Game,
+    gameId: string
+  ): void {
+    if (playerId) {
+      this.isSpymaster$.next(!this.isSpymaster$.value);
+      if (!game.codeMasters.hasOwnProperty(playerId)) {
+        this.gameService.addSpyMaster(playerId, game, gameId);
+      }
     }
   }
 

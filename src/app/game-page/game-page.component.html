@@ -131,7 +131,7 @@
           (endTurn)="endTurn(data.game, data.gameId, data.currentTeam)"
           (newGame)="newGame(getStartTeam(data.game), $event)"
           (revealCards)="
-            toggleSpymaster(data.player?.id || '', data.game, data.gameId)
+            toggleSpymaster(data.player?.id, data.game, data.gameId)
           "
           (clue)="submitClue(data.currentTeam, data.game, data.gameId)"
           (toggleMenu)="drawer.toggle()"
