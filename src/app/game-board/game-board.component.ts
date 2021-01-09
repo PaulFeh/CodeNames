@@ -139,15 +139,17 @@ export class GameBoardComponent implements OnInit, OnChanges {
         .map((card) => card.id);
 
       if (currentSelectedCards.length !== previousSelectedCards.length) {
-        const selectedCard = currentSelectedCards.filter(
+        const selectedCard = currentSelectedCards.find(
           (x) => !previousSelectedCards.includes(x)
-        )[0];
-        const selectedIndex = currentGame.cards
-          .map((card) => card.id)
-          .indexOf(selectedCard);
-        this.snackbar.open(`Card ${selectedIndex + 1} selected!`, undefined, {
-          duration: 4000,
-        });
+        );
+        if (selectedCard !== undefined) {
+          const selectedIndex = currentGame.cards
+            .map((card) => card.id)
+            .indexOf(selectedCard);
+          this.snackbar.open(`Card ${selectedIndex + 1} selected!`, undefined, {
+            duration: 4000,
+          });
+        }
       }
     }
   }
