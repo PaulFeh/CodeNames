@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Idle } from '@ng-idle/core';
+import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
@@ -97,6 +97,7 @@ export class GamePageComponent implements OnInit {
   ) {
     idle.setIdle(5 * 60);
     idle.setTimeout(10 * 60);
+    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
     idle.onTimeout.pipe(untilDestroyed(this)).subscribe(() => {
       this.router.navigate(['']);
       this.dialog.closeAll();
