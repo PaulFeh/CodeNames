@@ -200,22 +200,28 @@
 </ng-container>
 
 <ng-template #joinTeamTemplate>
-  <h2 mat-dialog-title fxLayoutAlign="space-between center">Join Team</h2>
-  <mat-dialog-content
-    ><div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
-      <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
-        Red Team
-      </button>
-      <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
-        Blue Team
-      </button>
-      <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
+  <h2 mat-dialog-title fxLayoutAlign="center center">Join Team</h2>
+  <mat-dialog-actions>
+    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px" fxFlex>
+      <div fxFlex>
+        <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
+          Red Team
+        </button>
+      </div>
+      <div fxFlex>
+        <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
+          Blue Team
+        </button>
+      </div>
+      <div fxFlex>
+        <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
+      </div>
     </div>
-  </mat-dialog-content>
+  </mat-dialog-actions>
 </ng-template>
 
 <ng-template #addClueTemplate>
-  <h2 mat-dialog-title fxLayoutAlign="space-between center">Give Clue</h2>
+  <h2 mat-dialog-title fxLayoutAlign="center center">Give Clue</h2>
   <mat-dialog-content>
     <div fxLayout="column">
       <mat-form-field>
@@ -249,17 +255,23 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
-      <button
-        mat-raised-button
-        color="primary"
-        [mat-dialog-close]="{ clue: clue.value, number: number.value }"
-        fxFlex
-        [disabled]="!clue.value"
-      >
-        Submit
-      </button>
-      <button mat-button mat-dialog-close fxFlex>Cancel</button>
-    </div>
   </mat-dialog-content>
+  <mat-dialog-actions>
+    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px" fxFlex>
+      <div fxFlex>
+        <button
+          mat-raised-button
+          color="primary"
+          [mat-dialog-close]="{ clue: clue.value, number: number.value }"
+          fxFlex
+          [disabled]="!clue.value"
+        >
+          Submit
+        </button>
+      </div>
+      <div fxFlex>
+        <button mat-button mat-dialog-close fxFlex>Cancel</button>
+      </div>
+    </div>
+  </mat-dialog-actions>
 </ng-template>
