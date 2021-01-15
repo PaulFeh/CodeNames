@@ -115,9 +115,17 @@
               </ng-template>
             </div>
           </mat-chip>
-          <mat-chip *ngIf="data.game?.teamWon === 0">{{
-            waitingForClue(data.game) ? "Waiting for clue..." : "Guessing..."
-          }}</mat-chip>
+          <mat-chip
+            *ngIf="data.game && data.game?.teamWon === 0"
+            (click)="
+              waitingForClue(data.game)
+                ? submitClue(data.currentTeam, data.game, data.gameId)
+                : null
+            "
+            >{{
+              waitingForClue(data.game) ? "Waiting for clue..." : "Guessing..."
+            }}</mat-chip
+          >
         </mat-chip-list>
       </div>
     </mat-sidenav>
