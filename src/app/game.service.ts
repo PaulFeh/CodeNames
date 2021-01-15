@@ -31,13 +31,19 @@ export class GameService {
     private pictureService: PictureService
   ) {}
 
-  createNewGame(startTeam: number, code?: string): Observable<string> {
+  createNewGame(
+    startTeam: number,
+    code?: string,
+    game?: Game
+  ): Observable<string> {
     const length = 6;
     const values = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     const newGame = this.generateGame(
       code ? code : randomString(length, values),
-      startTeam
+      startTeam,
+      20,
+      game
     );
     if (code) {
       this.currentGame?.set(newGame);
@@ -160,7 +166,8 @@ export class GameService {
   private generateGame(
     code: string,
     startTeam: number = 1,
-    totalCards: number = 20
+    totalCards: number = 20,
+    previousGame?: Game
   ): Game {
     const game: Game = {
       code,
@@ -172,9 +179,11 @@ export class GameService {
       cardsSelected: 0,
     };
 
+    const previousCards = previousGame?.cards.map((card) => card.id);
+
     let startId = 0;
     const numTeamCards = 7;
-    const images = this.pictureService.getImages(totalCards);
+    const images = this.pictureService.getImages(totalCards, previousCards);
 
     // add assassin card
     game.cards.push({
