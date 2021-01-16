@@ -118,7 +118,7 @@
           <mat-chip
             *ngIf="data.game && data.game?.teamWon === 0"
             (click)="
-              waitingForClue(data.game)
+              data.isSpymaster && waitingForClue(data.game)
                 ? submitClue(data.currentTeam, data.game, data.gameId)
                 : null
             "
