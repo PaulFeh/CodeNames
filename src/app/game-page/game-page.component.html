@@ -16,6 +16,7 @@
 >
   <mat-sidenav-container
     class="sidenav-container"
+    [class.winner]="data.game?.teamWon !== 0"
     [class.mobile]="data.isHandset"
   >
     <mat-sidenav
