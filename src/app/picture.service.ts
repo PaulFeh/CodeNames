@@ -8,7 +8,7 @@ export class PictureService {
   constructor() {}
 
   getImages(total = 20, previousCards?: number[]): string[] {
-    const totalImages = 337;
+    const totalImages = 335;
     let imgArray = Array.from(Array(totalImages), (e, i) => i + 1);
     imgArray = shuffle(imgArray);
 
