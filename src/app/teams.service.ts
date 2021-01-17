@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable, of, Subject } from 'rxjs';
 import {
-  distinctUntilChanged,
   filter,
   map,
   shareReplay,
@@ -105,10 +104,7 @@ export class TeamsService {
       );
   }
 
-  getTeam(
-    gameId: string,
-    team: number
-  ): Observable<{ id: string; name: string }[]> {
+  getTeam(team: number): Observable<{ id: string; name: string }[]> {
     return this.teams$.pipe(
       map((teams) => (teams ? { ...teams[team] } : {})),
       map((currentTeam) => {
@@ -125,7 +121,7 @@ export class TeamsService {
     );
   }
 
-  getCurrentTeam(gameId: string): Observable<number> {
+  getCurrentTeam(): Observable<number> {
     return this.teams$.pipe(
       withLatestFrom(this.auth.user),
       map(([teams, user]) => {

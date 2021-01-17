@@ -53,17 +53,10 @@ export class GamePageComponent implements OnInit {
     })
   );
 
-  team1$ = this.gameId$.pipe(
-    switchMap((gameId) => this.teamsService.getTeam(gameId, 1))
-  );
-  team2$ = this.gameId$.pipe(
-    switchMap((gameId) => this.teamsService.getTeam(gameId, 2))
-  );
+  team1$ = this.teamsService.getTeam(1);
+  team2$ = this.teamsService.getTeam(2);
 
-  currentTeam$ = this.gameId$.pipe(
-    switchMap((gameId) => this.teamsService.getCurrentTeam(gameId)),
-    shareReplay()
-  );
+  currentTeam$ = this.teamsService.getCurrentTeam().pipe(shareReplay());
 
   isTeam1$ = this.currentTeam$.pipe(map((team) => team === 1));
   isTeam2$ = this.currentTeam$.pipe(map((team) => team === 2));
