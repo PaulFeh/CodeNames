@@ -216,17 +216,17 @@
     fxLayoutAlign="center"
     fxLayoutGap="15px"
   >
-    <div fxFlex>
+    <div fxFlex="noshrink">
       <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
         Red Team
       </button>
     </div>
-    <div fxFlex>
+    <div fxFlex="noshrink">
       <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
         Blue Team
       </button>
     </div>
-    <div fxFlex>
+    <div fxFlex="noshrink">
       <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
     </div>
   </div>
@@ -234,7 +234,7 @@
 
 <ng-template #addClueTemplate>
   <h2 mat-dialog-title fxLayoutAlign="center center">Give Clue</h2>
-  <mat-dialog-content>
+  <div mat-dialog-content>
     <div fxLayout="column">
       <mat-form-field>
         <mat-label>Clue</mat-label>
@@ -267,10 +267,10 @@
         </mat-select>
       </mat-form-field>
     </div>
-  </mat-dialog-content>
+  </div>
   <div mat-dialog-actions>
     <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px" fxFlex>
-      <div fxFlex>
+      <div fxFlex="noshrink">
         <button
           mat-raised-button
           color="primary"
@@ -281,7 +281,7 @@
           Submit
         </button>
       </div>
-      <div fxFlex>
+      <div fxFlex="noshrink">
         <button mat-button mat-dialog-close fxFlex>Cancel</button>
       </div>
     </div>
