@@ -54,8 +54,6 @@ export interface Card {
   ],
 })
 export class GameBoardComponent implements OnInit, OnChanges {
-  @ViewChild('roomCode')
-  roomCodeTemplate: TemplateRef<any> | undefined;
   @Input()
   game: Game | undefined | null;
   @Input()

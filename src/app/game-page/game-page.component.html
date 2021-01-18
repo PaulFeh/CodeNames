@@ -210,23 +210,26 @@
 
 <ng-template #joinTeamTemplate>
   <h2 mat-dialog-title fxLayoutAlign="center center">Join Team</h2>
-  <mat-dialog-actions>
-    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px" fxFlex>
-      <div fxFlex>
-        <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
-          Red Team
-        </button>
-      </div>
-      <div fxFlex>
-        <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
-          Blue Team
-        </button>
-      </div>
-      <div fxFlex>
-        <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
-      </div>
+  <div
+    mat-dialog-actions
+    fxLayout="column"
+    fxLayoutAlign="center"
+    fxLayoutGap="15px"
+  >
+    <div fxFlex>
+      <button mat-raised-button color="accent" [mat-dialog-close]="1" fxFlex>
+        Red Team
+      </button>
     </div>
-  </mat-dialog-actions>
+    <div fxFlex>
+      <button mat-raised-button color="primary" [mat-dialog-close]="2" fxFlex>
+        Blue Team
+      </button>
+    </div>
+    <div fxFlex>
+      <button mat-button [mat-dialog-close]="0" fxFlex>Just Observing</button>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template #addClueTemplate>
@@ -265,7 +268,7 @@
       </mat-form-field>
     </div>
   </mat-dialog-content>
-  <mat-dialog-actions>
+  <div mat-dialog-actions>
     <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px" fxFlex>
       <div fxFlex>
         <button
@@ -282,5 +285,5 @@
         <button mat-button mat-dialog-close fxFlex>Cancel</button>
       </div>
     </div>
-  </mat-dialog-actions>
+  </div>
 </ng-template>
